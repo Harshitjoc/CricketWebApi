@@ -78,10 +78,17 @@ namespace Cricket.Controllers
         [HttpPost]
         public async Task<ActionResult<Stadium>> PostStadium(Stadium stadium)
         {
-            _context.Stadium.Add(stadium);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Stadium.Add(stadium);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetStadium", new { id = stadium.Id }, stadium);
+                return CreatedAtAction("GetStadium", new { id = stadium.Id }, stadium);
+            }
+            catch (DbUpdateException ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         // DELETE: api/Stadia/5

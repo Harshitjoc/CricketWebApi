@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Cricket.Data;
 using Cricket.Models;
 
+
 namespace Cricket.Controllers
 {
     [Route("api/[controller]")]
@@ -78,10 +79,18 @@ namespace Cricket.Controllers
         [HttpPost]
         public async Task<ActionResult<Player>> PostPlayer(Player player)
         {
-            _context.Player.Add(player);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Player.Add(player);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPlayer", new { id = player.Id }, player);
+                return CreatedAtAction("GetPlayer", new { id = player.Id }, player);
+            }
+            catch (DbUpdateException ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+            
         }
 
         // DELETE: api/Players/5

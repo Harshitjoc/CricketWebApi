@@ -78,10 +78,17 @@ namespace Cricket.Controllers
         [HttpPost]
         public async Task<ActionResult<PlayerRole>> PostPlayerRole(PlayerRole playerRole)
         {
-            _context.PlayerRole.Add(playerRole);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.PlayerRole.Add(playerRole);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPlayerRole", new { id = playerRole.Id }, playerRole);
+                return CreatedAtAction("GetPlayerRole", new { id = playerRole.Id }, playerRole);
+            }
+            catch (DbUpdateException ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         // DELETE: api/PlayerRoles/5

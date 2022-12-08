@@ -78,10 +78,18 @@ namespace Cricket.Controllers
         [HttpPost]
         public async Task<ActionResult<MatchDetail>> PostMatchDetail(MatchDetail matchDetail)
         {
-            _context.MatchDetail.Add(matchDetail);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.MatchDetail.Add(matchDetail);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetMatchDetail", new { id = matchDetail.Id }, matchDetail);
+                return CreatedAtAction("GetMatchDetail", new { id = matchDetail.Id }, matchDetail);
+            }
+            catch (DbUpdateException ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+
         }
 
         // DELETE: api/MatchDetails/5

@@ -78,10 +78,17 @@ namespace Cricket.Controllers
         [HttpPost]
         public async Task<ActionResult<UmpireRole>> PostUmpireRole(UmpireRole umpireRole)
         {
-            _context.UmpireRole.Add(umpireRole);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.UmpireRole.Add(umpireRole);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUmpireRole", new { id = umpireRole.Id }, umpireRole);
+                return CreatedAtAction("GetUmpireRole", new { id = umpireRole.Id }, umpireRole);
+            }
+            catch (DbUpdateException ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         // DELETE: api/UmpireRoles/5

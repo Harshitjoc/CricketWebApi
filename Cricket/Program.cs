@@ -1,14 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Cricket.Data;
-
-
-
+using Cricket.Data.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<CricketContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("CricketContext") ?? throw new InvalidOperationException("Connection string 'CricketContext' not found.")));
-
+builder.Services.AddScoped<IPlayerRepository,PlayerRepository>();
 
 
 // Add services to the container.

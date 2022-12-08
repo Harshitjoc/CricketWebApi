@@ -78,10 +78,17 @@ namespace Cricket.Controllers
         [HttpPost]
         public async Task<ActionResult<Series>> PostSeries(Series series)
         {
-            _context.Series.Add(series);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Series.Add(series);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetSeries", new { id = series.Id }, series);
+                return CreatedAtAction("GetSeries", new { id = series.Id }, series);
+            }
+            catch (DbUpdateException ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         // DELETE: api/Series/5

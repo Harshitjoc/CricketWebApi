@@ -78,10 +78,17 @@ namespace Cricket.Controllers
         [HttpPost]
         public async Task<ActionResult<Country>> PostCountry(Country country)
         {
-            _context.Country.Add(country);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Country.Add(country);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCountry", new { id = country.Id }, country);
+                return CreatedAtAction("GetCountry", new { id = country.Id }, country);
+            }
+            catch(DbUpdateException ex) 
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         // DELETE: api/Countries/5
