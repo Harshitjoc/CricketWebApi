@@ -1,32 +1,17 @@
 ﻿using Cricket.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Cricket.Data.Repositories
 {
-    public class PlayerRepository : IPlayerRepository
+    public class PlayerRepository : BaseRepository<Player>, IGenericRepository<Player>
     {
-        public Task<Player> Add(Player player)
+        private readonly CricketContext _context;
+        public PlayerRepository(CricketContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public bool Delete(int id)
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task<IEnumerable<Player>> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Player> GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Update(Player player)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

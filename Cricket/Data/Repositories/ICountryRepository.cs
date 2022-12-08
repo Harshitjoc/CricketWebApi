@@ -6,8 +6,8 @@ namespace Cricket.Data.Repositories
     {
         Task<IEnumerable<Country>> GetAll();
         Task<Country> GetById(int id);
-        bool Update(Country country);
+        Task<Country> Update(Country country);
         Task<Country> Add(Country country);
-        bool Delete(int id);
+        void Delete(int id);
     }
 }

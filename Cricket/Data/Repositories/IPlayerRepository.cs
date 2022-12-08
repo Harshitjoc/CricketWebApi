@@ -7,8 +7,8 @@ namespace Cricket.Data.Repositories
     {
         Task<IEnumerable<Player>> GetAll();
         Task<Player> GetById(int id);
-        bool Update(Player player);
+        Task<Player> Update(Player player);
         Task<Player> Add(Player player);
-        bool Delete(int id);
+        void Delete(int id);
     }
 }
