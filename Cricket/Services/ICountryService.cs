@@ -1,8 +1,8 @@
 ﻿using Cricket.Models;
 
-namespace Cricket.Data.Repositories
+namespace Cricket.Services
 {
-    public interface ICountryRepository
+    public interface ICountryService
     {
         Task<IEnumerable<Country>> GetAll();
         Task<Country> GetById(int id);

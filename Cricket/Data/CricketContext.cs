@@ -27,14 +27,24 @@ namespace Cricket.Data
 
         public DbSet<Stadium> Stadium { get; set; }
 
-        public DbSet<TeamA> TeamA { get; set; }
-
-        public DbSet<TeamB> TeamB { get; set; }
-
         public DbSet<Toss> Toss { get; set; }
 
         public DbSet<Umpire> Umpire { get; set; }
 
         public DbSet<UmpireRole> UmpireRole { get; set; }
+
+        public DbSet<Cricket.Models.BatsmanScoreBoard> BatsmanScoreBoard { get; set; }
+
+        public DbSet<Cricket.Models.BowlerScoreBoard> BowlerScoreBoard { get; set; }
+
+        public DbSet<Cricket.Models.PlayerRoleMap> PlayerRoleMap { get; set; }
+
+        public DbSet<Cricket.Models.ScoreBoard> ScoreBoard { get; set; }
+
+        public DbSet<Cricket.Models.Team> Team { get; set; }
+
+        public DbSet<Cricket.Models.TeamPlayerMap> TeamPlayerMap { get; set; }
+
+        public DbSet<Cricket.Models.UmpireRoleMap> UmpireRoleMap { get; set; }
     }
 }

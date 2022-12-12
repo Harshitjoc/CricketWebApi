@@ -1,13 +1,13 @@
 ﻿using Cricket.Models;
 
-namespace Cricket.Data.Repositories
+namespace Cricket.Services
 {
-    public interface IMatchDetailRepository
+    public interface IMatchDetailService
     {
         Task<IEnumerable<MatchDetail>> GetAll();
         Task<MatchDetail> GetById(int id);
-        bool Update(MatchDetail matchDetail);
+        Task<MatchDetail> Update(MatchDetail matchDetail);
         Task<MatchDetail> Add(MatchDetail matchDetail);
-        bool Delete(int id);
+        void Delete(int id);
     }
 }

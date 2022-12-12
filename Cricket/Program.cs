@@ -13,8 +13,6 @@ builder.Services.AddScoped<IGenericRepository<MatchDetail>, MatchDetailRepositor
 builder.Services.AddScoped<IGenericRepository<PlayerRole>, PlayerRoleRepository>();
 builder.Services.AddScoped<IGenericRepository<Series>, SeriesRepository>();
 builder.Services.AddScoped<IGenericRepository<Stadium>, StadiumRepository>();
-builder.Services.AddScoped<IGenericRepository<TeamA>, TeamARepository>();
-builder.Services.AddScoped<IGenericRepository<TeamB>, TeamBRepository>();
 builder.Services.AddScoped<IGenericRepository<Toss>, TossRepository>();
 builder.Services.AddScoped<IGenericRepository<Umpire>, UmpireRepository>();
 builder.Services.AddScoped<IGenericRepository<UmpireRole>, UmpireRoleRepository>();

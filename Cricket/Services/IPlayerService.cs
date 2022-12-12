@@ -1,9 +1,8 @@
 ﻿using Cricket.Models;
-using Microsoft.AspNetCore.Mvc;
 
-namespace Cricket.Data.Repositories
+namespace Cricket.Services
 {
-    public interface IPlayerRepository
+    public interface IPlayerService
     {
         Task<IEnumerable<Player>> GetAll();
         Task<Player> GetById(int id);
