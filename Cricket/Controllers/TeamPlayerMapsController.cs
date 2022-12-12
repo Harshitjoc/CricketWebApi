@@ -12,47 +12,47 @@ namespace Cricket.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PlayersController : ControllerBase
+    public class TeamPlayerMapsController : ControllerBase
     {
         private readonly CricketContext _context;
 
-        public PlayersController(CricketContext context)
+        public TeamPlayerMapsController(CricketContext context)
         {
             _context = context;
         }
 
-        // GET: api/Players
+        // GET: api/TeamPlayerMaps
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Player>>> GetPlayer()
+        public async Task<ActionResult<IEnumerable<TeamPlayerMap>>> GetTeamPlayerMap()
         {
-            return await _context.Player.ToListAsync();
+            return await _context.TeamPlayerMap.ToListAsync();
         }
 
-        // GET: api/Players/5
+        // GET: api/TeamPlayerMaps/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Player>> GetPlayer(int id)
+        public async Task<ActionResult<TeamPlayerMap>> GetTeamPlayerMap(int id)
         {
-            var player = await _context.Player.FindAsync(id);
+            var teamPlayerMap = await _context.TeamPlayerMap.FindAsync(id);
 
-            if (player == null)
+            if (teamPlayerMap == null)
             {
                 return NotFound();
             }
 
-            return player;
+            return teamPlayerMap;
         }
 
-        // PUT: api/Players/5
+        // PUT: api/TeamPlayerMaps/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPlayer(int id, Player player)
+        public async Task<IActionResult> PutTeamPlayerMap(int id, TeamPlayerMap teamPlayerMap)
         {
-            if (id != player.Id)
+            if (id != teamPlayerMap.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(player).State = EntityState.Modified;
+            _context.Entry(teamPlayerMap).State = EntityState.Modified;
 
             try
             {
@@ -60,7 +60,7 @@ namespace Cricket.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PlayerExists(id))
+                if (!TeamPlayerMapExists(id))
                 {
                     return NotFound();
                 }
@@ -73,17 +73,17 @@ namespace Cricket.Controllers
             return NoContent();
         }
 
-        // POST: api/Players
+        // POST: api/TeamPlayerMaps
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Player>> PostPlayer(Player player)
+        public async Task<ActionResult<TeamPlayerMap>> PostTeamPlayerMap(TeamPlayerMap teamPlayerMap)
         {
             try
             {
-                _context.Player.Add(player);
+                _context.TeamPlayerMap.Add(teamPlayerMap);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetPlayer", new { id = player.Id }, player);
+                return CreatedAtAction("GetTeamPlayerMap", new { id = teamPlayerMap.Id }, teamPlayerMap);
             }
             catch (DbUpdateException ex)
             {
@@ -91,25 +91,25 @@ namespace Cricket.Controllers
             }
         }
 
-        // DELETE: api/Players/5
+        // DELETE: api/TeamPlayerMaps/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePlayer(int id)
+        public async Task<IActionResult> DeleteTeamPlayerMap(int id)
         {
-            var player = await _context.Player.FindAsync(id);
-            if (player == null)
+            var teamPlayerMap = await _context.TeamPlayerMap.FindAsync(id);
+            if (teamPlayerMap == null)
             {
                 return NotFound();
             }
 
-            _context.Player.Remove(player);
+            _context.TeamPlayerMap.Remove(teamPlayerMap);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool PlayerExists(int id)
+        private bool TeamPlayerMapExists(int id)
         {
-            return _context.Player.Any(e => e.Id == id);
+            return _context.TeamPlayerMap.Any(e => e.Id == id);
         }
     }
 }

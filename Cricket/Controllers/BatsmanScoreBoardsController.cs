@@ -12,47 +12,47 @@ namespace Cricket.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TeamAsController : ControllerBase
+    public class BatsmanScoreBoardsController : ControllerBase
     {
         private readonly CricketContext _context;
 
-        public TeamAsController(CricketContext context)
+        public BatsmanScoreBoardsController(CricketContext context)
         {
             _context = context;
         }
 
-        // GET: api/TeamAs
+        // GET: api/BatsmanScoreBoards
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TeamA>>> GetTeamA()
+        public async Task<ActionResult<IEnumerable<BatsmanScoreBoard>>> GetBatsmanScoreBoard()
         {
-            return await _context.TeamA.ToListAsync();
+            return await _context.BatsmanScoreBoard.ToListAsync();
         }
 
-        // GET: api/TeamAs/5
+        // GET: api/BatsmanScoreBoards/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TeamA>> GetTeamA(int id)
+        public async Task<ActionResult<BatsmanScoreBoard>> GetBatsmanScoreBoard(int id)
         {
-            var teamA = await _context.TeamA.FindAsync(id);
+            var batsmanScoreBoard = await _context.BatsmanScoreBoard.FindAsync(id);
 
-            if (teamA == null)
+            if (batsmanScoreBoard == null)
             {
                 return NotFound();
             }
 
-            return teamA;
+            return batsmanScoreBoard;
         }
 
-        // PUT: api/TeamAs/5
+        // PUT: api/BatsmanScoreBoards/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTeamA(int id, TeamA teamA)
+        public async Task<IActionResult> PutBatsmanScoreBoard(int id, BatsmanScoreBoard batsmanScoreBoard)
         {
-            if (id != teamA.Id)
+            if (id != batsmanScoreBoard.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(teamA).State = EntityState.Modified;
+            _context.Entry(batsmanScoreBoard).State = EntityState.Modified;
 
             try
             {
@@ -60,7 +60,7 @@ namespace Cricket.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TeamAExists(id))
+                if (!BatsmanScoreBoardExists(id))
                 {
                     return NotFound();
                 }
@@ -73,17 +73,17 @@ namespace Cricket.Controllers
             return NoContent();
         }
 
-        // POST: api/TeamAs
+        // POST: api/BatsmanScoreBoards
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<TeamA>> PostTeamA(TeamA teamA)
+        public async Task<ActionResult<BatsmanScoreBoard>> PostBatsmanScoreBoard(BatsmanScoreBoard batsmanScoreBoard)
         {
             try
             {
-                _context.TeamA.Add(teamA);
+                _context.BatsmanScoreBoard.Add(batsmanScoreBoard);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetTeamA", new { id = teamA.Id }, teamA);
+                return CreatedAtAction("GetBatsmanScoreBoard", new { id = batsmanScoreBoard.Id }, batsmanScoreBoard);
             }
             catch (DbUpdateException ex)
             {
@@ -91,25 +91,25 @@ namespace Cricket.Controllers
             }
         }
 
-        // DELETE: api/TeamAs/5
+        // DELETE: api/BatsmanScoreBoards/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTeamA(int id)
+        public async Task<IActionResult> DeleteBatsmanScoreBoard(int id)
         {
-            var teamA = await _context.TeamA.FindAsync(id);
-            if (teamA == null)
+            var batsmanScoreBoard = await _context.BatsmanScoreBoard.FindAsync(id);
+            if (batsmanScoreBoard == null)
             {
                 return NotFound();
             }
 
-            _context.TeamA.Remove(teamA);
+            _context.BatsmanScoreBoard.Remove(batsmanScoreBoard);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool TeamAExists(int id)
+        private bool BatsmanScoreBoardExists(int id)
         {
-            return _context.TeamA.Any(e => e.Id == id);
+            return _context.BatsmanScoreBoard.Any(e => e.Id == id);
         }
     }
 }

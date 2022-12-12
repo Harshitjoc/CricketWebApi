@@ -2,13 +2,13 @@
 
 namespace Cricket.Models
 {
-    public class TeamA
+    public class Team
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string Name { get; set; }
-        public int PlayerId { get; set; } 
-        public int PlayerRoleId { get; set; }
-        public virtual ICollection<MatchDetail> MatchDetails { get; } = new List<MatchDetail>();
+
+        public virtual ICollection<TeamPlayerMap> TeamPlayerMaps { get; } = new List<TeamPlayerMap>();
+        public virtual ICollection<ScoreBoard> ScoreBoards { get; } = new List<ScoreBoard>();
     }
 }

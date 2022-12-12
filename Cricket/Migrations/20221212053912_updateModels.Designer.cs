@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cricket.Migrations
 {
     [DbContext(typeof(CricketContext))]
-    [Migration("20221202043518_Cricket.Data.CricketContext")]
-    partial class CricketDataCricketContext
+    [Migration("20221212053912_updateModels")]
+    partial class updateModels
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,57 @@ namespace Cricket.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Cricket.Models.BatsmanScoreBoard", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Fours")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PlayerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Scored")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Sixes")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlayerId");
+
+                    b.ToTable("BatsmanScoreBoard");
+                });
+
+            modelBuilder.Entity("Cricket.Models.BowlerScoreBoard", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Overs")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PlayerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Wickets")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlayerId");
+
+                    b.ToTable("BowlerScoreBoard");
+                });
 
             modelBuilder.Entity("Cricket.Models.Country", b =>
                 {
@@ -50,22 +101,22 @@ namespace Cricket.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("PlayerCount")
+                        .HasColumnType("int");
+
                     b.Property<int>("SeriesId")
                         .HasColumnType("int");
 
                     b.Property<int>("StadiumId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TeamAId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TeamBId")
+                    b.Property<int>("TeamId")
                         .HasColumnType("int");
 
                     b.Property<int>("TossId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UmpireRoleId")
+                    b.Property<int>("UmpireRoleMapId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -74,13 +125,9 @@ namespace Cricket.Migrations
 
                     b.HasIndex("StadiumId");
 
-                    b.HasIndex("TeamAId");
-
-                    b.HasIndex("TeamBId");
-
                     b.HasIndex("TossId");
 
-                    b.HasIndex("UmpireRoleId");
+                    b.HasIndex("UmpireRoleMapId");
 
                     b.ToTable("MatchDetail");
                 });
@@ -133,6 +180,50 @@ namespace Cricket.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PlayerRole");
+                });
+
+            modelBuilder.Entity("Cricket.Models.PlayerRoleMap", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("PlayerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PlayerRoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlayerId");
+
+                    b.HasIndex("PlayerRoleId");
+
+                    b.ToTable("PlayerRoleMap");
+                });
+
+            modelBuilder.Entity("Cricket.Models.ScoreBoard", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Scored")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TeamId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TeamId");
+
+                    b.ToTable("ScoreBoard");
                 });
 
             modelBuilder.Entity("Cricket.Models.Series", b =>
@@ -188,7 +279,7 @@ namespace Cricket.Migrations
                     b.ToTable("Stadium");
                 });
 
-            modelBuilder.Entity("Cricket.Models.TeamA", b =>
+            modelBuilder.Entity("Cricket.Models.Team", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -200,22 +291,12 @@ namespace Cricket.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PlayerId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PlayerRoleId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("PlayerId");
-
-                    b.HasIndex("PlayerRoleId");
-
-                    b.ToTable("TeamA");
+                    b.ToTable("Team");
                 });
 
-            modelBuilder.Entity("Cricket.Models.TeamB", b =>
+            modelBuilder.Entity("Cricket.Models.TeamPlayerMap", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -223,23 +304,22 @@ namespace Cricket.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("Counter")
+                        .HasColumnType("bit");
 
                     b.Property<int>("PlayerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PlayerRoleId")
+                    b.Property<int>("TeamId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PlayerId");
 
-                    b.HasIndex("PlayerRoleId");
+                    b.HasIndex("TeamId");
 
-                    b.ToTable("TeamB");
+                    b.ToTable("TeamPlayerMap");
                 });
 
             modelBuilder.Entity("Cricket.Models.Toss", b =>
@@ -297,164 +377,183 @@ namespace Cricket.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.HasKey("Id");
+
+                    b.ToTable("UmpireRole");
+                });
+
+            modelBuilder.Entity("Cricket.Models.UmpireRoleMap", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("UmpireId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UmpireRoleId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UmpireId");
 
-                    b.ToTable("UmpireRole");
+                    b.HasIndex("UmpireRoleId");
+
+                    b.ToTable("UmpireRoleMap");
+                });
+
+            modelBuilder.Entity("Cricket.Models.BatsmanScoreBoard", b =>
+                {
+                    b.HasOne("Cricket.Models.Player", null)
+                        .WithMany("BatsmanScoreBoards")
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Cricket.Models.BowlerScoreBoard", b =>
+                {
+                    b.HasOne("Cricket.Models.Player", null)
+                        .WithMany("BowlerScoreBoards")
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Cricket.Models.MatchDetail", b =>
                 {
-                    b.HasOne("Cricket.Models.Series", "Series")
+                    b.HasOne("Cricket.Models.Series", null)
                         .WithMany("MatchDetails")
                         .HasForeignKey("SeriesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Cricket.Models.Stadium", "Stadium")
+                    b.HasOne("Cricket.Models.Stadium", null)
                         .WithMany("MatchDetails")
                         .HasForeignKey("StadiumId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Cricket.Models.TeamA", "TeamA")
-                        .WithMany("MatchDetails")
-                        .HasForeignKey("TeamAId");
-
-                    b.HasOne("Cricket.Models.TeamB", "TeamB")
-                        .WithMany("MatchDetails")
-                        .HasForeignKey("TeamBId");
-
-                    b.HasOne("Cricket.Models.Toss", "Toss")
+                    b.HasOne("Cricket.Models.Toss", null)
                         .WithMany("MatchDetails")
                         .HasForeignKey("TossId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Cricket.Models.UmpireRole", "UmpireRole")
+                    b.HasOne("Cricket.Models.UmpireRoleMap", null)
                         .WithMany("MatchDetails")
-                        .HasForeignKey("UmpireRoleId");
-
-                    b.Navigation("Series");
-
-                    b.Navigation("Stadium");
-
-                    b.Navigation("TeamA");
-
-                    b.Navigation("TeamB");
-
-                    b.Navigation("Toss");
-
-                    b.Navigation("UmpireRole");
+                        .HasForeignKey("UmpireRoleMapId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Cricket.Models.Player", b =>
                 {
-                    b.HasOne("Cricket.Models.Country", "Country")
+                    b.HasOne("Cricket.Models.Country", null)
                         .WithMany("Players")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
 
-                    b.Navigation("Country");
+            modelBuilder.Entity("Cricket.Models.PlayerRoleMap", b =>
+                {
+                    b.HasOne("Cricket.Models.Player", null)
+                        .WithMany("PlayerRoleMaps")
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Cricket.Models.PlayerRole", null)
+                        .WithMany("PlayerRoleMaps")
+                        .HasForeignKey("PlayerRoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Cricket.Models.ScoreBoard", b =>
+                {
+                    b.HasOne("Cricket.Models.Team", null)
+                        .WithMany("ScoreBoards")
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Cricket.Models.Stadium", b =>
                 {
-                    b.HasOne("Cricket.Models.Country", "Country")
-                        .WithMany("Stadia")
+                    b.HasOne("Cricket.Models.Country", null)
+                        .WithMany("Stadiums")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Country");
                 });
 
-            modelBuilder.Entity("Cricket.Models.TeamA", b =>
+            modelBuilder.Entity("Cricket.Models.TeamPlayerMap", b =>
                 {
-                    b.HasOne("Cricket.Models.Player", "Player")
-                        .WithMany("TeamAs")
+                    b.HasOne("Cricket.Models.Player", null)
+                        .WithMany("TeamPlayerMaps")
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Cricket.Models.PlayerRole", "PlayerRole")
-                        .WithMany("TeamAs")
-                        .HasForeignKey("PlayerRoleId")
+                    b.HasOne("Cricket.Models.Team", null)
+                        .WithMany("TeamPlayerMaps")
+                        .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Player");
-
-                    b.Navigation("PlayerRole");
-                });
-
-            modelBuilder.Entity("Cricket.Models.TeamB", b =>
-                {
-                    b.HasOne("Cricket.Models.Player", "Player")
-                        .WithMany("TeamBs")
-                        .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Cricket.Models.PlayerRole", "PlayerRole")
-                        .WithMany("TeamBs")
-                        .HasForeignKey("PlayerRoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Player");
-
-                    b.Navigation("PlayerRole");
                 });
 
             modelBuilder.Entity("Cricket.Models.Umpire", b =>
                 {
-                    b.HasOne("Cricket.Models.Country", "Country")
+                    b.HasOne("Cricket.Models.Country", null)
                         .WithMany("Umpires")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Country");
                 });
 
-            modelBuilder.Entity("Cricket.Models.UmpireRole", b =>
+            modelBuilder.Entity("Cricket.Models.UmpireRoleMap", b =>
                 {
-                    b.HasOne("Cricket.Models.Umpire", "Umpire")
-                        .WithMany("UmpireRoles")
+                    b.HasOne("Cricket.Models.Umpire", null)
+                        .WithMany("UmpireRoleMaps")
                         .HasForeignKey("UmpireId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Umpire");
+                    b.HasOne("Cricket.Models.UmpireRole", null)
+                        .WithMany("UmpireRoleMaps")
+                        .HasForeignKey("UmpireRoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Cricket.Models.Country", b =>
                 {
                     b.Navigation("Players");
 
-                    b.Navigation("Stadia");
+                    b.Navigation("Stadiums");
 
                     b.Navigation("Umpires");
                 });
 
             modelBuilder.Entity("Cricket.Models.Player", b =>
                 {
-                    b.Navigation("TeamAs");
+                    b.Navigation("BatsmanScoreBoards");
 
-                    b.Navigation("TeamBs");
+                    b.Navigation("BowlerScoreBoards");
+
+                    b.Navigation("PlayerRoleMaps");
+
+                    b.Navigation("TeamPlayerMaps");
                 });
 
             modelBuilder.Entity("Cricket.Models.PlayerRole", b =>
                 {
-                    b.Navigation("TeamAs");
-
-                    b.Navigation("TeamBs");
+                    b.Navigation("PlayerRoleMaps");
                 });
 
             modelBuilder.Entity("Cricket.Models.Series", b =>
@@ -467,14 +566,11 @@ namespace Cricket.Migrations
                     b.Navigation("MatchDetails");
                 });
 
-            modelBuilder.Entity("Cricket.Models.TeamA", b =>
+            modelBuilder.Entity("Cricket.Models.Team", b =>
                 {
-                    b.Navigation("MatchDetails");
-                });
+                    b.Navigation("ScoreBoards");
 
-            modelBuilder.Entity("Cricket.Models.TeamB", b =>
-                {
-                    b.Navigation("MatchDetails");
+                    b.Navigation("TeamPlayerMaps");
                 });
 
             modelBuilder.Entity("Cricket.Models.Toss", b =>
@@ -484,10 +580,15 @@ namespace Cricket.Migrations
 
             modelBuilder.Entity("Cricket.Models.Umpire", b =>
                 {
-                    b.Navigation("UmpireRoles");
+                    b.Navigation("UmpireRoleMaps");
                 });
 
             modelBuilder.Entity("Cricket.Models.UmpireRole", b =>
+                {
+                    b.Navigation("UmpireRoleMaps");
+                });
+
+            modelBuilder.Entity("Cricket.Models.UmpireRoleMap", b =>
                 {
                     b.Navigation("MatchDetails");
                 });

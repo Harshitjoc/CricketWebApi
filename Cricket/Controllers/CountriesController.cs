@@ -85,7 +85,7 @@ namespace Cricket.Controllers
 
                 return CreatedAtAction("GetCountry", new { id = country.Id }, country);
             }
-            catch(DbUpdateException ex) 
+            catch (DbUpdateException ex)
             {
                 return StatusCode(500, "Internal server error");
             }

@@ -12,47 +12,47 @@ namespace Cricket.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PlayersController : ControllerBase
+    public class ScoreBoardsController : ControllerBase
     {
         private readonly CricketContext _context;
 
-        public PlayersController(CricketContext context)
+        public ScoreBoardsController(CricketContext context)
         {
             _context = context;
         }
 
-        // GET: api/Players
+        // GET: api/ScoreBoards
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Player>>> GetPlayer()
+        public async Task<ActionResult<IEnumerable<ScoreBoard>>> GetScoreBoard()
         {
-            return await _context.Player.ToListAsync();
+            return await _context.ScoreBoard.ToListAsync();
         }
 
-        // GET: api/Players/5
+        // GET: api/ScoreBoards/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Player>> GetPlayer(int id)
+        public async Task<ActionResult<ScoreBoard>> GetScoreBoard(int id)
         {
-            var player = await _context.Player.FindAsync(id);
+            var scoreBoard = await _context.ScoreBoard.FindAsync(id);
 
-            if (player == null)
+            if (scoreBoard == null)
             {
                 return NotFound();
             }
 
-            return player;
+            return scoreBoard;
         }
 
-        // PUT: api/Players/5
+        // PUT: api/ScoreBoards/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPlayer(int id, Player player)
+        public async Task<IActionResult> PutScoreBoard(int id, ScoreBoard scoreBoard)
         {
-            if (id != player.Id)
+            if (id != scoreBoard.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(player).State = EntityState.Modified;
+            _context.Entry(scoreBoard).State = EntityState.Modified;
 
             try
             {
@@ -60,7 +60,7 @@ namespace Cricket.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PlayerExists(id))
+                if (!ScoreBoardExists(id))
                 {
                     return NotFound();
                 }
@@ -73,17 +73,17 @@ namespace Cricket.Controllers
             return NoContent();
         }
 
-        // POST: api/Players
+        // POST: api/ScoreBoards
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Player>> PostPlayer(Player player)
+        public async Task<ActionResult<ScoreBoard>> PostScoreBoard(ScoreBoard scoreBoard)
         {
             try
             {
-                _context.Player.Add(player);
+                _context.ScoreBoard.Add(scoreBoard);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetPlayer", new { id = player.Id }, player);
+                return CreatedAtAction("GetScoreBoard", new { id = scoreBoard.Id }, scoreBoard);
             }
             catch (DbUpdateException ex)
             {
@@ -91,25 +91,25 @@ namespace Cricket.Controllers
             }
         }
 
-        // DELETE: api/Players/5
+        // DELETE: api/ScoreBoards/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePlayer(int id)
+        public async Task<IActionResult> DeleteScoreBoard(int id)
         {
-            var player = await _context.Player.FindAsync(id);
-            if (player == null)
+            var scoreBoard = await _context.ScoreBoard.FindAsync(id);
+            if (scoreBoard == null)
             {
                 return NotFound();
             }
 
-            _context.Player.Remove(player);
+            _context.ScoreBoard.Remove(scoreBoard);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool PlayerExists(int id)
+        private bool ScoreBoardExists(int id)
         {
-            return _context.Player.Any(e => e.Id == id);
+            return _context.ScoreBoard.Any(e => e.Id == id);
         }
     }
 }

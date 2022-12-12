@@ -9,6 +9,6 @@ namespace Cricket.Models
         public string Name { get; set; }
         public int CountryId { get; set; }
 
-        public virtual ICollection<UmpireRole> UmpireRoles  { get; } = new List<UmpireRole>();
+        public virtual ICollection<UmpireRoleMap> UmpireRoleMaps  { get; } = new List<UmpireRoleMap>();
     }
 }

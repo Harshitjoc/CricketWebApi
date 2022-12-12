@@ -2,12 +2,12 @@
 
 namespace Cricket.Models
 {
-    public class UmpireRole
+    public class BowlerScoreBoard
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string Name { get; set; }
-
-        public virtual ICollection<UmpireRoleMap> UmpireRoleMaps { get; } = new List<UmpireRoleMap>();
+        public int Wickets { get; set; }
+        public int Overs { get; set; }
+        public int PlayerId { get; set; }
     }
 }

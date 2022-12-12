@@ -2,14 +2,14 @@
 
 namespace Cricket.Models
 {
-    public class TeamB
+    public class BatsmanScoreBoard
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string Name { get; set; }
+        public int Scored { get; set; }
         public int PlayerId { get; set; }
-        public int PlayerRoleId { get; set; }
+        public int Sixes { get; set; }
+        public int Fours { get; set; }
 
-        public virtual ICollection<MatchDetail> MatchDetails { get; } = new List<MatchDetail>();
     }
 }

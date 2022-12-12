@@ -78,6 +78,10 @@ namespace Cricket.Controllers
         [HttpPost]
         public async Task<ActionResult<MatchDetail>> PostMatchDetail(MatchDetail matchDetail)
         {
+            matchDetail.PlayerCount = (from TeamPlayerMap in _context.TeamPlayerMap
+                                       where TeamPlayerMap.Counter == true && TeamPlayerMap.TeamId == matchDetail.TeamId
+                                       select TeamPlayerMap.TeamId).Count();
+
             try
             {
                 _context.MatchDetail.Add(matchDetail);
@@ -89,7 +93,6 @@ namespace Cricket.Controllers
             {
                 return StatusCode(500, "Internal server error");
             }
-
         }
 
         // DELETE: api/MatchDetails/5

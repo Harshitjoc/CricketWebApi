@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Cricket.Migrations
 {
     /// <inheritdoc />
-    public partial class CricketDataCricketContext : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -55,6 +55,19 @@ namespace Cricket.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Team",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Team", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Toss",
                 columns: table => new
                 {
@@ -66,6 +79,19 @@ namespace Cricket.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Toss", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UmpireRole",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UmpireRole", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -132,26 +158,41 @@ namespace Cricket.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TeamA",
+                name: "ScoreBoard",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PlayerId = table.Column<int>(type: "int", nullable: false),
-                    PlayerRoleId = table.Column<int>(type: "int", nullable: false)
+                    TeamId = table.Column<int>(type: "int", nullable: false),
+                    Scored = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TeamA", x => x.Id);
+                    table.PrimaryKey("PK_ScoreBoard", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TeamA_PlayerRole_PlayerRoleId",
-                        column: x => x.PlayerRoleId,
-                        principalTable: "PlayerRole",
+                        name: "FK_ScoreBoard_Team_TeamId",
+                        column: x => x.TeamId,
+                        principalTable: "Team",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BatsmanScoreBoard",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Scored = table.Column<int>(type: "int", nullable: false),
+                    PlayerId = table.Column<int>(type: "int", nullable: false),
+                    Sixes = table.Column<int>(type: "int", nullable: false),
+                    Fours = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BatsmanScoreBoard", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TeamA_Player_PlayerId",
+                        name: "FK_BatsmanScoreBoard_Player_PlayerId",
                         column: x => x.PlayerId,
                         principalTable: "Player",
                         principalColumn: "Id",
@@ -159,26 +200,20 @@ namespace Cricket.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TeamB",
+                name: "BowlerScoreBoard",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PlayerId = table.Column<int>(type: "int", nullable: false),
-                    PlayerRoleId = table.Column<int>(type: "int", nullable: false)
+                    Wickets = table.Column<int>(type: "int", nullable: false),
+                    Overs = table.Column<int>(type: "int", nullable: false),
+                    PlayerId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TeamB", x => x.Id);
+                    table.PrimaryKey("PK_BowlerScoreBoard", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TeamB_PlayerRole_PlayerRoleId",
-                        column: x => x.PlayerRoleId,
-                        principalTable: "PlayerRole",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TeamB_Player_PlayerId",
+                        name: "FK_BowlerScoreBoard_Player_PlayerId",
                         column: x => x.PlayerId,
                         principalTable: "Player",
                         principalColumn: "Id",
@@ -186,19 +221,78 @@ namespace Cricket.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UmpireRole",
+                name: "PlayerRoleMap",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UmpireId = table.Column<int>(type: "int", nullable: false)
+                    PlayerId = table.Column<int>(type: "int", nullable: false),
+                    PlayerRoleId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UmpireRole", x => x.Id);
+                    table.PrimaryKey("PK_PlayerRoleMap", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UmpireRole_Umpire_UmpireId",
+                        name: "FK_PlayerRoleMap_PlayerRole_PlayerRoleId",
+                        column: x => x.PlayerRoleId,
+                        principalTable: "PlayerRole",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PlayerRoleMap_Player_PlayerId",
+                        column: x => x.PlayerId,
+                        principalTable: "Player",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TeamPlayerMap",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TeamId = table.Column<int>(type: "int", nullable: false),
+                    PlayerId = table.Column<int>(type: "int", nullable: false),
+                    PlayerCount = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TeamPlayerMap", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TeamPlayerMap_Player_PlayerId",
+                        column: x => x.PlayerId,
+                        principalTable: "Player",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TeamPlayerMap_Team_TeamId",
+                        column: x => x.TeamId,
+                        principalTable: "Team",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UmpireRoleMap",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UmpireId = table.Column<int>(type: "int", nullable: false),
+                    UmpireRoleId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UmpireRoleMap", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UmpireRoleMap_UmpireRole_UmpireRoleId",
+                        column: x => x.UmpireRoleId,
+                        principalTable: "UmpireRole",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UmpireRoleMap_Umpire_UmpireId",
                         column: x => x.UmpireId,
                         principalTable: "Umpire",
                         principalColumn: "Id",
@@ -211,12 +305,11 @@ namespace Cricket.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TeamAId = table.Column<int>(type: "int", nullable: true),
-                    TeamBId = table.Column<int>(type: "int", nullable: true),
+                    TeamId = table.Column<int>(type: "int", nullable: false),
                     StadiumId = table.Column<int>(type: "int", nullable: false),
                     SeriesId = table.Column<int>(type: "int", nullable: false),
                     TossId = table.Column<int>(type: "int", nullable: false),
-                    UmpireRoleId = table.Column<int>(type: "int", nullable: true)
+                    UmpireRoleMapId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -226,35 +319,36 @@ namespace Cricket.Migrations
                         column: x => x.SeriesId,
                         principalTable: "Series",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_MatchDetail_Stadium_StadiumId",
                         column: x => x.StadiumId,
                         principalTable: "Stadium",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_MatchDetail_TeamA_TeamAId",
-                        column: x => x.TeamAId,
-                        principalTable: "TeamA",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_MatchDetail_TeamB_TeamBId",
-                        column: x => x.TeamBId,
-                        principalTable: "TeamB",
-                        principalColumn: "Id");
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_MatchDetail_Toss_TossId",
                         column: x => x.TossId,
                         principalTable: "Toss",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
-                        name: "FK_MatchDetail_UmpireRole_UmpireRoleId",
-                        column: x => x.UmpireRoleId,
-                        principalTable: "UmpireRole",
-                        principalColumn: "Id");
+                        name: "FK_MatchDetail_UmpireRoleMap_UmpireRoleMapId",
+                        column: x => x.UmpireRoleMapId,
+                        principalTable: "UmpireRoleMap",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BatsmanScoreBoard_PlayerId",
+                table: "BatsmanScoreBoard",
+                column: "PlayerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BowlerScoreBoard_PlayerId",
+                table: "BowlerScoreBoard",
+                column: "PlayerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MatchDetail_SeriesId",
@@ -267,24 +361,14 @@ namespace Cricket.Migrations
                 column: "StadiumId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MatchDetail_TeamAId",
-                table: "MatchDetail",
-                column: "TeamAId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MatchDetail_TeamBId",
-                table: "MatchDetail",
-                column: "TeamBId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_MatchDetail_TossId",
                 table: "MatchDetail",
                 column: "TossId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MatchDetail_UmpireRoleId",
+                name: "IX_MatchDetail_UmpireRoleMapId",
                 table: "MatchDetail",
-                column: "UmpireRoleId");
+                column: "UmpireRoleMapId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Player_CountryId",
@@ -292,29 +376,34 @@ namespace Cricket.Migrations
                 column: "CountryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PlayerRoleMap_PlayerId",
+                table: "PlayerRoleMap",
+                column: "PlayerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayerRoleMap_PlayerRoleId",
+                table: "PlayerRoleMap",
+                column: "PlayerRoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ScoreBoard_TeamId",
+                table: "ScoreBoard",
+                column: "TeamId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Stadium_CountryId",
                 table: "Stadium",
                 column: "CountryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TeamA_PlayerId",
-                table: "TeamA",
+                name: "IX_TeamPlayerMap_PlayerId",
+                table: "TeamPlayerMap",
                 column: "PlayerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TeamA_PlayerRoleId",
-                table: "TeamA",
-                column: "PlayerRoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TeamB_PlayerId",
-                table: "TeamB",
-                column: "PlayerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TeamB_PlayerRoleId",
-                table: "TeamB",
-                column: "PlayerRoleId");
+                name: "IX_TeamPlayerMap_TeamId",
+                table: "TeamPlayerMap",
+                column: "TeamId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Umpire_CountryId",
@@ -322,16 +411,36 @@ namespace Cricket.Migrations
                 column: "CountryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UmpireRole_UmpireId",
-                table: "UmpireRole",
+                name: "IX_UmpireRoleMap_UmpireId",
+                table: "UmpireRoleMap",
                 column: "UmpireId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UmpireRoleMap_UmpireRoleId",
+                table: "UmpireRoleMap",
+                column: "UmpireRoleId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "BatsmanScoreBoard");
+
+            migrationBuilder.DropTable(
+                name: "BowlerScoreBoard");
+
+            migrationBuilder.DropTable(
                 name: "MatchDetail");
+
+            migrationBuilder.DropTable(
+                name: "PlayerRoleMap");
+
+            migrationBuilder.DropTable(
+                name: "ScoreBoard");
+
+            migrationBuilder.DropTable(
+                name: "TeamPlayerMap");
 
             migrationBuilder.DropTable(
                 name: "Series");
@@ -340,22 +449,22 @@ namespace Cricket.Migrations
                 name: "Stadium");
 
             migrationBuilder.DropTable(
-                name: "TeamA");
-
-            migrationBuilder.DropTable(
-                name: "TeamB");
-
-            migrationBuilder.DropTable(
                 name: "Toss");
 
             migrationBuilder.DropTable(
-                name: "UmpireRole");
+                name: "UmpireRoleMap");
 
             migrationBuilder.DropTable(
                 name: "PlayerRole");
 
             migrationBuilder.DropTable(
                 name: "Player");
+
+            migrationBuilder.DropTable(
+                name: "Team");
+
+            migrationBuilder.DropTable(
+                name: "UmpireRole");
 
             migrationBuilder.DropTable(
                 name: "Umpire");

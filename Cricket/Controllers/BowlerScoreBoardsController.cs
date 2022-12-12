@@ -12,47 +12,47 @@ namespace Cricket.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TeamBsController : ControllerBase
+    public class BowlerScoreBoardsController : ControllerBase
     {
         private readonly CricketContext _context;
 
-        public TeamBsController(CricketContext context)
+        public BowlerScoreBoardsController(CricketContext context)
         {
             _context = context;
         }
 
-        // GET: api/TeamBs
+        // GET: api/BowlerScoreBoards
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TeamB>>> GetTeamB()
+        public async Task<ActionResult<IEnumerable<BowlerScoreBoard>>> GetBowlerScoreBoard()
         {
-            return await _context.TeamB.ToListAsync();
+            return await _context.BowlerScoreBoard.ToListAsync();
         }
 
-        // GET: api/TeamBs/5
+        // GET: api/BowlerScoreBoards/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TeamB>> GetTeamB(int id)
+        public async Task<ActionResult<BowlerScoreBoard>> GetBowlerScoreBoard(int id)
         {
-            var teamB = await _context.TeamB.FindAsync(id);
+            var bowlerScoreBoard = await _context.BowlerScoreBoard.FindAsync(id);
 
-            if (teamB == null)
+            if (bowlerScoreBoard == null)
             {
                 return NotFound();
             }
 
-            return teamB;
+            return bowlerScoreBoard;
         }
 
-        // PUT: api/TeamBs/5
+        // PUT: api/BowlerScoreBoards/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTeamB(int id, TeamB teamB)
+        public async Task<IActionResult> PutBowlerScoreBoard(int id, BowlerScoreBoard bowlerScoreBoard)
         {
-            if (id != teamB.Id)
+            if (id != bowlerScoreBoard.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(teamB).State = EntityState.Modified;
+            _context.Entry(bowlerScoreBoard).State = EntityState.Modified;
 
             try
             {
@@ -60,7 +60,7 @@ namespace Cricket.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TeamBExists(id))
+                if (!BowlerScoreBoardExists(id))
                 {
                     return NotFound();
                 }
@@ -73,17 +73,17 @@ namespace Cricket.Controllers
             return NoContent();
         }
 
-        // POST: api/TeamBs
+        // POST: api/BowlerScoreBoards
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<TeamB>> PostTeamB(TeamB teamB)
+        public async Task<ActionResult<BowlerScoreBoard>> PostBowlerScoreBoard(BowlerScoreBoard bowlerScoreBoard)
         {
             try
             {
-                _context.TeamB.Add(teamB);
+                _context.BowlerScoreBoard.Add(bowlerScoreBoard);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetTeamB", new { id = teamB.Id }, teamB);
+                return CreatedAtAction("GetBowlerScoreBoard", new { id = bowlerScoreBoard.Id }, bowlerScoreBoard);
             }
             catch (DbUpdateException ex)
             {
@@ -91,25 +91,25 @@ namespace Cricket.Controllers
             }
         }
 
-        // DELETE: api/TeamBs/5
+        // DELETE: api/BowlerScoreBoards/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTeamB(int id)
+        public async Task<IActionResult> DeleteBowlerScoreBoard(int id)
         {
-            var teamB = await _context.TeamB.FindAsync(id);
-            if (teamB == null)
+            var bowlerScoreBoard = await _context.BowlerScoreBoard.FindAsync(id);
+            if (bowlerScoreBoard == null)
             {
                 return NotFound();
             }
 
-            _context.TeamB.Remove(teamB);
+            _context.BowlerScoreBoard.Remove(bowlerScoreBoard);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool TeamBExists(int id)
+        private bool BowlerScoreBoardExists(int id)
         {
-            return _context.TeamB.Any(e => e.Id == id);
+            return _context.BowlerScoreBoard.Any(e => e.Id == id);
         }
     }
 }

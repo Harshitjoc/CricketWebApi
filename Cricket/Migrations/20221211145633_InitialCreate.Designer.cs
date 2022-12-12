@@ -4,6 +4,7 @@ using Cricket.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cricket.Migrations
 {
     [DbContext(typeof(CricketContext))]
-    partial class CricketContextModelSnapshot : ModelSnapshot
+    [Migration("20221211145633_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -97,9 +100,6 @@ namespace Cricket.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("PlayerCount")
-                        .HasColumnType("int");
 
                     b.Property<int>("SeriesId")
                         .HasColumnType("int");
@@ -301,7 +301,7 @@ namespace Cricket.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Counter")
+                    b.Property<bool>("PlayerCount")
                         .HasColumnType("bit");
 
                     b.Property<int>("PlayerId")

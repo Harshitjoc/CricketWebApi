@@ -9,7 +9,6 @@ namespace Cricket.Models
         public string Name { get; set; }
         public string ShortName { get; set; }
 
-        public virtual ICollection<TeamA> TeamAs { get; } = new List<TeamA>();
-        public virtual ICollection<TeamB> TeamBs { get; } = new List<TeamB>();
+        public virtual ICollection<PlayerRoleMap> PlayerRoleMaps { get; } = new List<PlayerRoleMap>();
     }
 }
