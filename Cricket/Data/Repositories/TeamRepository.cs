@@ -9,6 +9,9 @@ namespace Cricket.Data.Repositories
         public TeamRepository(CricketContext context) : base(context)
         {
         }
-        
+        public override async Task<IEnumerable<Team>> GetAll()
+        {
+            return await _context.Team.Include(t => t.TeamPlayerMaps).ToListAsync();
+        }
     }
 }

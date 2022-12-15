@@ -9,12 +9,15 @@ namespace Cricket.Services
 {
     public class TeamService : ITeamService
     {
-        public TeamService(IGenericRepository<Team> repository)
+        public TeamService(IGenericRepository<Team> repository, IGenericRepository<TeamPlayerMap> teamPlayerMapRepository)
         {
             Repository = repository;
+            TeamPlayerMapRepository = teamPlayerMapRepository;
         }
 
         private IGenericRepository<Team> Repository { get; }
+        public IGenericRepository<TeamPlayerMap> TeamPlayerMapRepository { get; }
+
         public async Task<TeamModel> Add(TeamModel team)
         {
             Team team1= new Team();
@@ -33,17 +36,15 @@ namespace Cricket.Services
         {
             List<TeamModel> teams = new List<TeamModel>();
             var result = await Repository.GetAll();
-            List<TeamPlayerMap> teamPlayerMaps= new List<TeamPlayerMap>();
-            var count = teamPlayerMaps.Where(x=> x.IsEnabled == true && x.TeamId == 1).Count();
+           
 
             foreach (var team in result)
             {
-                
                 teams.Add(new TeamModel
                 {
                     Id = team.Id,
                     Name = team.Name,
-                    PlayerCount = count
+                    PlayerCount = team.TeamPlayerMaps.Count()
                 });
             }
             
