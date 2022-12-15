@@ -22,7 +22,7 @@ namespace Cricket.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Cricket.Models.BatsmanScoreBoard", b =>
+            modelBuilder.Entity("Cricket.Data.Models.BatsmanScoreBoard", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -30,8 +30,20 @@ namespace Cricket.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("Fours")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("bit");
 
                     b.Property<int>("PlayerId")
                         .HasColumnType("int");
@@ -42,6 +54,12 @@ namespace Cricket.Migrations
                     b.Property<int>("Sixes")
                         .HasColumnType("int");
 
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
                     b.HasIndex("PlayerId");
@@ -49,7 +67,7 @@ namespace Cricket.Migrations
                     b.ToTable("BatsmanScoreBoard");
                 });
 
-            modelBuilder.Entity("Cricket.Models.BowlerScoreBoard", b =>
+            modelBuilder.Entity("Cricket.Data.Models.BowlerScoreBoard", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -57,11 +75,29 @@ namespace Cricket.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("bit");
+
                     b.Property<int>("Overs")
                         .HasColumnType("int");
 
                     b.Property<int>("PlayerId")
                         .HasColumnType("int");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("Wickets")
                         .HasColumnType("int");
@@ -73,7 +109,7 @@ namespace Cricket.Migrations
                     b.ToTable("BowlerScoreBoard");
                 });
 
-            modelBuilder.Entity("Cricket.Models.Country", b =>
+            modelBuilder.Entity("Cricket.Data.Models.Country", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -81,16 +117,34 @@ namespace Cricket.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.ToTable("Country");
                 });
 
-            modelBuilder.Entity("Cricket.Models.MatchDetail", b =>
+            modelBuilder.Entity("Cricket.Data.Models.MatchDetail", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -98,8 +152,17 @@ namespace Cricket.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("PlayerCount")
+                    b.Property<int>("CreatedBy")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("bit");
 
                     b.Property<int>("SeriesId")
                         .HasColumnType("int");
@@ -107,14 +170,17 @@ namespace Cricket.Migrations
                     b.Property<int>("StadiumId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TeamId")
+                    b.Property<int>("TeamAId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TossId")
+                    b.Property<int>("TeamBId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UmpireRoleMapId")
+                    b.Property<int>("UpdatedBy")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -122,14 +188,14 @@ namespace Cricket.Migrations
 
                     b.HasIndex("StadiumId");
 
-                    b.HasIndex("TossId");
+                    b.HasIndex("TeamAId");
 
-                    b.HasIndex("UmpireRoleMapId");
+                    b.HasIndex("TeamBId");
 
                     b.ToTable("MatchDetail");
                 });
 
-            modelBuilder.Entity("Cricket.Models.Player", b =>
+            modelBuilder.Entity("Cricket.Data.Models.Player", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -143,13 +209,31 @@ namespace Cricket.Migrations
                     b.Property<int>("CountryId")
                         .HasColumnType("int");
 
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -158,13 +242,25 @@ namespace Cricket.Migrations
                     b.ToTable("Player");
                 });
 
-            modelBuilder.Entity("Cricket.Models.PlayerRole", b =>
+            modelBuilder.Entity("Cricket.Data.Models.PlayerRole", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -174,12 +270,18 @@ namespace Cricket.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
                     b.ToTable("PlayerRole");
                 });
 
-            modelBuilder.Entity("Cricket.Models.PlayerRoleMap", b =>
+            modelBuilder.Entity("Cricket.Data.Models.PlayerRoleMap", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -187,11 +289,29 @@ namespace Cricket.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("bit");
+
                     b.Property<int>("PlayerId")
                         .HasColumnType("int");
 
                     b.Property<int>("PlayerRoleId")
                         .HasColumnType("int");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -202,7 +322,7 @@ namespace Cricket.Migrations
                     b.ToTable("PlayerRoleMap");
                 });
 
-            modelBuilder.Entity("Cricket.Models.ScoreBoard", b =>
+            modelBuilder.Entity("Cricket.Data.Models.ScoreBoard", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -210,11 +330,29 @@ namespace Cricket.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("bit");
+
                     b.Property<int>("Scored")
                         .HasColumnType("int");
 
                     b.Property<int>("TeamId")
                         .HasColumnType("int");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -223,7 +361,7 @@ namespace Cricket.Migrations
                     b.ToTable("ScoreBoard");
                 });
 
-            modelBuilder.Entity("Cricket.Models.Series", b =>
+            modelBuilder.Entity("Cricket.Data.Models.Series", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -235,8 +373,20 @@ namespace Cricket.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -245,12 +395,18 @@ namespace Cricket.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
                     b.ToTable("Series");
                 });
 
-            modelBuilder.Entity("Cricket.Models.Stadium", b =>
+            modelBuilder.Entity("Cricket.Data.Models.Stadium", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -261,6 +417,18 @@ namespace Cricket.Migrations
                     b.Property<int>("CountryId")
                         .HasColumnType("int");
 
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -269,6 +437,12 @@ namespace Cricket.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CountryId");
@@ -276,7 +450,7 @@ namespace Cricket.Migrations
                     b.ToTable("Stadium");
                 });
 
-            modelBuilder.Entity("Cricket.Models.Team", b =>
+            modelBuilder.Entity("Cricket.Data.Models.Team", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -284,16 +458,34 @@ namespace Cricket.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.ToTable("Team");
                 });
 
-            modelBuilder.Entity("Cricket.Models.TeamPlayerMap", b =>
+            modelBuilder.Entity("Cricket.Data.Models.TeamPlayerMap", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -301,7 +493,16 @@ namespace Cricket.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Counter")
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsEnabled")
                         .HasColumnType("bit");
 
                     b.Property<int>("PlayerId")
@@ -309,6 +510,12 @@ namespace Cricket.Migrations
 
                     b.Property<int>("TeamId")
                         .HasColumnType("int");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -319,7 +526,7 @@ namespace Cricket.Migrations
                     b.ToTable("TeamPlayerMap");
                 });
 
-            modelBuilder.Entity("Cricket.Models.Toss", b =>
+            modelBuilder.Entity("Cricket.Data.Models.Toss", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -327,9 +534,27 @@ namespace Cricket.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Decision")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Winner")
                         .IsRequired()
@@ -340,7 +565,7 @@ namespace Cricket.Migrations
                     b.ToTable("Toss");
                 });
 
-            modelBuilder.Entity("Cricket.Models.Umpire", b =>
+            modelBuilder.Entity("Cricket.Data.Models.Umpire", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -351,9 +576,27 @@ namespace Cricket.Migrations
                     b.Property<int>("CountryId")
                         .HasColumnType("int");
 
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -362,7 +605,7 @@ namespace Cricket.Migrations
                     b.ToTable("Umpire");
                 });
 
-            modelBuilder.Entity("Cricket.Models.UmpireRole", b =>
+            modelBuilder.Entity("Cricket.Data.Models.UmpireRole", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -370,16 +613,34 @@ namespace Cricket.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.ToTable("UmpireRole");
                 });
 
-            modelBuilder.Entity("Cricket.Models.UmpireRoleMap", b =>
+            modelBuilder.Entity("Cricket.Data.Models.UmpireRoleMap", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -387,11 +648,29 @@ namespace Cricket.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("bit");
+
                     b.Property<int>("UmpireId")
                         .HasColumnType("int");
 
                     b.Property<int>("UmpireRoleId")
                         .HasColumnType("int");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -402,133 +681,143 @@ namespace Cricket.Migrations
                     b.ToTable("UmpireRoleMap");
                 });
 
-            modelBuilder.Entity("Cricket.Models.BatsmanScoreBoard", b =>
+            modelBuilder.Entity("Cricket.Data.Models.BatsmanScoreBoard", b =>
                 {
-                    b.HasOne("Cricket.Models.Player", null)
+                    b.HasOne("Cricket.Data.Models.Player", null)
                         .WithMany("BatsmanScoreBoards")
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Cricket.Models.BowlerScoreBoard", b =>
+            modelBuilder.Entity("Cricket.Data.Models.BowlerScoreBoard", b =>
                 {
-                    b.HasOne("Cricket.Models.Player", null)
+                    b.HasOne("Cricket.Data.Models.Player", null)
                         .WithMany("BowlerScoreBoards")
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Cricket.Models.MatchDetail", b =>
+            modelBuilder.Entity("Cricket.Data.Models.MatchDetail", b =>
                 {
-                    b.HasOne("Cricket.Models.Series", null)
+                    b.HasOne("Cricket.Data.Models.Series", "Series")
                         .WithMany("MatchDetails")
                         .HasForeignKey("SeriesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Cricket.Models.Stadium", null)
+                    b.HasOne("Cricket.Data.Models.Stadium", "Stadium")
                         .WithMany("MatchDetails")
                         .HasForeignKey("StadiumId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Cricket.Models.Toss", null)
-                        .WithMany("MatchDetails")
-                        .HasForeignKey("TossId")
+                    b.HasOne("Cricket.Data.Models.Team", "TeamA")
+                        .WithMany()
+                        .HasForeignKey("TeamAId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Cricket.Models.UmpireRoleMap", null)
-                        .WithMany("MatchDetails")
-                        .HasForeignKey("UmpireRoleMapId")
+                    b.HasOne("Cricket.Data.Models.Team", "TeamB")
+                        .WithMany()
+                        .HasForeignKey("TeamBId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Series");
+
+                    b.Navigation("Stadium");
+
+                    b.Navigation("TeamA");
+
+                    b.Navigation("TeamB");
                 });
 
-            modelBuilder.Entity("Cricket.Models.Player", b =>
+            modelBuilder.Entity("Cricket.Data.Models.Player", b =>
                 {
-                    b.HasOne("Cricket.Models.Country", null)
+                    b.HasOne("Cricket.Data.Models.Country", "Country")
                         .WithMany("Players")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Country");
                 });
 
-            modelBuilder.Entity("Cricket.Models.PlayerRoleMap", b =>
+            modelBuilder.Entity("Cricket.Data.Models.PlayerRoleMap", b =>
                 {
-                    b.HasOne("Cricket.Models.Player", null)
+                    b.HasOne("Cricket.Data.Models.Player", null)
                         .WithMany("PlayerRoleMaps")
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Cricket.Models.PlayerRole", null)
+                    b.HasOne("Cricket.Data.Models.PlayerRole", null)
                         .WithMany("PlayerRoleMaps")
                         .HasForeignKey("PlayerRoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Cricket.Models.ScoreBoard", b =>
+            modelBuilder.Entity("Cricket.Data.Models.ScoreBoard", b =>
                 {
-                    b.HasOne("Cricket.Models.Team", null)
+                    b.HasOne("Cricket.Data.Models.Team", null)
                         .WithMany("ScoreBoards")
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Cricket.Models.Stadium", b =>
+            modelBuilder.Entity("Cricket.Data.Models.Stadium", b =>
                 {
-                    b.HasOne("Cricket.Models.Country", null)
+                    b.HasOne("Cricket.Data.Models.Country", null)
                         .WithMany("Stadiums")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Cricket.Models.TeamPlayerMap", b =>
+            modelBuilder.Entity("Cricket.Data.Models.TeamPlayerMap", b =>
                 {
-                    b.HasOne("Cricket.Models.Player", null)
+                    b.HasOne("Cricket.Data.Models.Player", null)
                         .WithMany("TeamPlayerMaps")
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Cricket.Models.Team", null)
+                    b.HasOne("Cricket.Data.Models.Team", null)
                         .WithMany("TeamPlayerMaps")
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Cricket.Models.Umpire", b =>
+            modelBuilder.Entity("Cricket.Data.Models.Umpire", b =>
                 {
-                    b.HasOne("Cricket.Models.Country", null)
+                    b.HasOne("Cricket.Data.Models.Country", null)
                         .WithMany("Umpires")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Cricket.Models.UmpireRoleMap", b =>
+            modelBuilder.Entity("Cricket.Data.Models.UmpireRoleMap", b =>
                 {
-                    b.HasOne("Cricket.Models.Umpire", null)
+                    b.HasOne("Cricket.Data.Models.Umpire", null)
                         .WithMany("UmpireRoleMaps")
                         .HasForeignKey("UmpireId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Cricket.Models.UmpireRole", null)
+                    b.HasOne("Cricket.Data.Models.UmpireRole", null)
                         .WithMany("UmpireRoleMaps")
                         .HasForeignKey("UmpireRoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Cricket.Models.Country", b =>
+            modelBuilder.Entity("Cricket.Data.Models.Country", b =>
                 {
                     b.Navigation("Players");
 
@@ -537,7 +826,7 @@ namespace Cricket.Migrations
                     b.Navigation("Umpires");
                 });
 
-            modelBuilder.Entity("Cricket.Models.Player", b =>
+            modelBuilder.Entity("Cricket.Data.Models.Player", b =>
                 {
                     b.Navigation("BatsmanScoreBoards");
 
@@ -548,46 +837,36 @@ namespace Cricket.Migrations
                     b.Navigation("TeamPlayerMaps");
                 });
 
-            modelBuilder.Entity("Cricket.Models.PlayerRole", b =>
+            modelBuilder.Entity("Cricket.Data.Models.PlayerRole", b =>
                 {
                     b.Navigation("PlayerRoleMaps");
                 });
 
-            modelBuilder.Entity("Cricket.Models.Series", b =>
+            modelBuilder.Entity("Cricket.Data.Models.Series", b =>
                 {
                     b.Navigation("MatchDetails");
                 });
 
-            modelBuilder.Entity("Cricket.Models.Stadium", b =>
+            modelBuilder.Entity("Cricket.Data.Models.Stadium", b =>
                 {
                     b.Navigation("MatchDetails");
                 });
 
-            modelBuilder.Entity("Cricket.Models.Team", b =>
+            modelBuilder.Entity("Cricket.Data.Models.Team", b =>
                 {
                     b.Navigation("ScoreBoards");
 
                     b.Navigation("TeamPlayerMaps");
                 });
 
-            modelBuilder.Entity("Cricket.Models.Toss", b =>
-                {
-                    b.Navigation("MatchDetails");
-                });
-
-            modelBuilder.Entity("Cricket.Models.Umpire", b =>
+            modelBuilder.Entity("Cricket.Data.Models.Umpire", b =>
                 {
                     b.Navigation("UmpireRoleMaps");
                 });
 
-            modelBuilder.Entity("Cricket.Models.UmpireRole", b =>
+            modelBuilder.Entity("Cricket.Data.Models.UmpireRole", b =>
                 {
                     b.Navigation("UmpireRoleMaps");
-                });
-
-            modelBuilder.Entity("Cricket.Models.UmpireRoleMap", b =>
-                {
-                    b.Navigation("MatchDetails");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Cricket.Data;
-using Cricket.Models;
+using Cricket.Data.Models;
+using Cricket.Services;
 
 namespace Cricket.Controllers
 {
@@ -14,25 +10,24 @@ namespace Cricket.Controllers
     [ApiController]
     public class UmpiresController : ControllerBase
     {
-        private readonly CricketContext _context;
-
-        public UmpiresController(CricketContext context)
+        private readonly IUmpireService _service;
+        public UmpiresController(IUmpireService service)
         {
-            _context = context;
+            _service = service;
         }
 
         // GET: api/Umpires
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Umpire>>> GetUmpire()
+        public async Task<IEnumerable<Umpire>> GetUmpire()
         {
-            return await _context.Umpire.ToListAsync();
+            return await _service.GetAll();
         }
 
         // GET: api/Umpires/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Umpire>> GetUmpire(int id)
         {
-            var umpire = await _context.Umpire.FindAsync(id);
+            var umpire = await _service.GetById(id);
 
             if (umpire == null)
             {
@@ -45,71 +40,24 @@ namespace Cricket.Controllers
         // PUT: api/Umpires/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUmpire(int id, Umpire umpire)
+        public async void PutUmpire(Umpire umpire)
         {
-            if (id != umpire.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(umpire).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UmpireExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            await _service.Update(umpire);
         }
 
         // POST: api/Umpires
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Umpire>> PostUmpire(Umpire umpire)
+        public void PostUmpire(Umpire umpire)
         {
-            try
-            {
-                _context.Umpire.Add(umpire);
-                await _context.SaveChangesAsync();
-
-                return CreatedAtAction("GetUmpire", new { id = umpire.Id }, umpire);
-            }
-            catch (DbUpdateException ex)
-            {
-                return StatusCode(500, "Internal server error");
-            }
+            _service.Add(umpire);
         }
 
         // DELETE: api/Umpires/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUmpire(int id)
+        public void DeleteUmpire(int id)
         {
-            var umpire = await _context.Umpire.FindAsync(id);
-            if (umpire == null)
-            {
-                return NotFound();
-            }
-
-            _context.Umpire.Remove(umpire);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool UmpireExists(int id)
-        {
-            return _context.Umpire.Any(e => e.Id == id);
+            _service.Delete(id);
         }
     }
 }

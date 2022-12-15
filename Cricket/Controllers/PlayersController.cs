@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Cricket.Data;
+using Cricket.Data.Repositories;
+using Cricket.Services;
+using Cricket.Data.Models;
 using Cricket.Models;
 
 namespace Cricket.Controllers
@@ -14,25 +13,31 @@ namespace Cricket.Controllers
     [ApiController]
     public class PlayersController : ControllerBase
     {
-        private readonly CricketContext _context;
-
-        public PlayersController(CricketContext context)
+        private readonly IPlayerService _service;
+        public PlayersController(IPlayerService service)
         {
-            _context = context;
+            _service = service;
         }
 
         // GET: api/Players
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Player>>> GetPlayer()
+        public async Task<IEnumerable<PlayerModel>> GetPlayer()
         {
-            return await _context.Player.ToListAsync();
+            return await _service.GetAll();
+        }
+
+        [Route("[action]/{id}")]
+        [HttpGet]
+        public async Task<IEnumerable<PlayerModel>> GetPlayersByCountry(int id)
+        {
+            return await _service.GetAllPlayersByCountry(id);
         }
 
         // GET: api/Players/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Player>> GetPlayer(int id)
+        public async Task<ActionResult<PlayerModel>> GetPlayer(int id)
         {
-            var player = await _context.Player.FindAsync(id);
+            var player = await _service.GetById(id);
 
             if (player == null)
             {
@@ -45,71 +50,24 @@ namespace Cricket.Controllers
         // PUT: api/Players/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPlayer(int id, Player player)
+        public async void Put(PlayerModel player)
         {
-            if (id != player.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(player).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PlayerExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            await _service.Update(player);
         }
 
         // POST: api/Players
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Player>> PostPlayer(Player player)
+        public void PostPlayer(PlayerModel player)
         {
-            try
-            {
-                _context.Player.Add(player);
-                await _context.SaveChangesAsync();
-
-                return CreatedAtAction("GetPlayer", new { id = player.Id }, player);
-            }
-            catch (DbUpdateException ex)
-            {
-                return StatusCode(500, "Internal server error");
-            }
+            _service.Add(player);
         }
 
         // DELETE: api/Players/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePlayer(int id)
+        public void DeletePlayer(int id)
         {
-            var player = await _context.Player.FindAsync(id);
-            if (player == null)
-            {
-                return NotFound();
-            }
-
-            _context.Player.Remove(player);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool PlayerExists(int id)
-        {
-            return _context.Player.Any(e => e.Id == id);
+            _service.Delete(id);
         }
     }
 }

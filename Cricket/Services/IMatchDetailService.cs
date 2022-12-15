@@ -1,4 +1,4 @@
-﻿using Cricket.Models;
+﻿using Cricket.Data.Models;
 
 namespace Cricket.Services
 {

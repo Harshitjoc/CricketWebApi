@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Cricket.Data;
-using Cricket.Models;
+using Cricket.Services;
+using System.Numerics;
+using Cricket.Data.Models;
 
 namespace Cricket.Controllers
 {
@@ -14,25 +16,24 @@ namespace Cricket.Controllers
     [ApiController]
     public class BowlerScoreBoardsController : ControllerBase
     {
-        private readonly CricketContext _context;
-
-        public BowlerScoreBoardsController(CricketContext context)
+        private readonly IBowlerScoreBoardService _service;
+        public BowlerScoreBoardsController(IBowlerScoreBoardService service)
         {
-            _context = context;
+            _service = service;
         }
 
         // GET: api/BowlerScoreBoards
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BowlerScoreBoard>>> GetBowlerScoreBoard()
+        public async Task<IEnumerable<BowlerScoreBoard>> GetBowlerScoreBoard()
         {
-            return await _context.BowlerScoreBoard.ToListAsync();
+            return await _service.GetAll();
         }
 
         // GET: api/BowlerScoreBoards/5
         [HttpGet("{id}")]
         public async Task<ActionResult<BowlerScoreBoard>> GetBowlerScoreBoard(int id)
         {
-            var bowlerScoreBoard = await _context.BowlerScoreBoard.FindAsync(id);
+            var bowlerScoreBoard = await _service.GetById(id);
 
             if (bowlerScoreBoard == null)
             {
@@ -45,71 +46,24 @@ namespace Cricket.Controllers
         // PUT: api/BowlerScoreBoards/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBowlerScoreBoard(int id, BowlerScoreBoard bowlerScoreBoard)
+        public async void PutBowlerScoreBoard( BowlerScoreBoard bowlerScoreBoard )
         {
-            if (id != bowlerScoreBoard.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(bowlerScoreBoard).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BowlerScoreBoardExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            await _service.Update(bowlerScoreBoard);
         }
 
         // POST: api/BowlerScoreBoards
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<BowlerScoreBoard>> PostBowlerScoreBoard(BowlerScoreBoard bowlerScoreBoard)
+        public void PostBowlerScoreBoard(BowlerScoreBoard bowlerScoreBoard)
         {
-            try
-            {
-                _context.BowlerScoreBoard.Add(bowlerScoreBoard);
-                await _context.SaveChangesAsync();
-
-                return CreatedAtAction("GetBowlerScoreBoard", new { id = bowlerScoreBoard.Id }, bowlerScoreBoard);
-            }
-            catch (DbUpdateException ex)
-            {
-                return StatusCode(500, "Internal server error");
-            }
+            _service.Add(bowlerScoreBoard);
         }
 
         // DELETE: api/BowlerScoreBoards/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBowlerScoreBoard(int id)
+        public void DeleteBowlerScoreBoard(int id)
         {
-            var bowlerScoreBoard = await _context.BowlerScoreBoard.FindAsync(id);
-            if (bowlerScoreBoard == null)
-            {
-                return NotFound();
-            }
-
-            _context.BowlerScoreBoard.Remove(bowlerScoreBoard);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool BowlerScoreBoardExists(int id)
-        {
-            return _context.BowlerScoreBoard.Any(e => e.Id == id);
+            _service.Delete(id);
         }
     }
 }

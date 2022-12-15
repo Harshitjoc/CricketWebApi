@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Cricket.Data;
-using Cricket.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using Cricket.Data.Models;
+using Cricket.Services;
 
 namespace Cricket.Controllers
 {
@@ -14,25 +8,24 @@ namespace Cricket.Controllers
     [ApiController]
     public class StadiumsController : ControllerBase
     {
-        private readonly CricketContext _context;
-
-        public StadiumsController(CricketContext context)
+        private readonly IStadiumService _service;
+        public StadiumsController(IStadiumService service)
         {
-            _context = context;
+            _service = service;
         }
 
         // GET: api/Stadia
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Stadium>>> GetStadium()
+        public async Task<IEnumerable<Stadium>> GetStadium()
         {
-            return await _context.Stadium.ToListAsync();
+            return await _service.GetAll();
         }
 
         // GET: api/Stadia/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Stadium>> GetStadium(int id)
         {
-            var stadium = await _context.Stadium.FindAsync(id);
+            var stadium = await _service.GetById(id);
 
             if (stadium == null)
             {
@@ -45,71 +38,24 @@ namespace Cricket.Controllers
         // PUT: api/Stadia/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutStadium(int id, Stadium stadium)
+        public async void PutStadium(Stadium stadium)
         {
-            if (id != stadium.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(stadium).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!StadiumExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            await _service.Update(stadium);
         }
 
         // POST: api/Stadia
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Stadium>> PostStadium(Stadium stadium)
+        public void PostStadium(Stadium stadium)
         {
-            try
-            {
-                _context.Stadium.Add(stadium);
-                await _context.SaveChangesAsync();
-
-                return CreatedAtAction("GetStadium", new { id = stadium.Id }, stadium);
-            }
-            catch (DbUpdateException ex)
-            {
-                return StatusCode(500, "Internal server error");
-            }
+            _service.Add(stadium);
         }
 
         // DELETE: api/Stadia/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteStadium(int id)
+        public void DeleteStadium(int id)
         {
-            var stadium = await _context.Stadium.FindAsync(id);
-            if (stadium == null)
-            {
-                return NotFound();
-            }
-
-            _context.Stadium.Remove(stadium);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool StadiumExists(int id)
-        {
-            return _context.Stadium.Any(e => e.Id == id);
+            _service.Delete(id);
         }
     }
 }

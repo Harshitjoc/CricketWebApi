@@ -1,32 +1,53 @@
-﻿namespace Cricket.Data.Repositories
+﻿using Cricket.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+
+namespace Cricket.Data.Repositories
 {
-    public class BaseRepository<T> : IGenericRepository<T>
+    public class BaseRepository<T> : IGenericRepository<T> where T : class
     {
-        public BaseRepository() { }
-
-        public Task<T> Add(T entity)
-        {
-            throw new NotImplementedException();
+        protected readonly CricketContext _context;
+        public BaseRepository(CricketContext context)
+        { 
+            _context = context;
+        }
+        public virtual async Task<T> Add(T entity)
+        { 
+            var result = await _context.Set<T>().AddAsync(entity);
+            await _context.SaveChangesAsync();
+            return result.Entity;
         }
 
-        public void Delete(int id)
+        public virtual async void Delete(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _context.Set<T>().FindAsync(id);
+            _context.Set<T>().Remove(entity);
+            await _context.SaveChangesAsync();
         }
 
-        public Task<IEnumerable<T>> GetAll()
+        public virtual async Task<List<T>> Get(Expression<Func<T, bool>> expression)
         {
-            throw new NotImplementedException();
+           return await _context.Set<T>().Where(expression).ToListAsync();
         }
 
-        public Task<T> GetById(int id)
+        public virtual async Task<IEnumerable<T>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _context.Set<T>().ToListAsync();
         }
 
-        public Task<T> Update(T entity)
+        public virtual async Task<T> GetById(int id)
         {
-            throw new NotImplementedException();
+            var result = await _context.Set<T>().FindAsync(id);
+            return result;
+        }
+
+        public virtual async Task<T> Update(T entity)
+        {
+            _context.Entry(entity).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return entity;
         }
     }
 }

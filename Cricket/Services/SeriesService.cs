@@ -1,38 +1,12 @@
-﻿using Cricket.Data.Repositories;
-using Cricket.Models;
+﻿using Cricket.Data.Models;
+using Cricket.Data.Repositories;
 
 namespace Cricket.Services
 {
-    public class SeriesService : ISeriesService
+    public class SeriesService : BaseService<Series>, ISeriesService
     {
-        private readonly SeriesRepository _seriesRepository;
-        public SeriesService(SeriesRepository seriesRepository)
+        public SeriesService(IGenericRepository<Series> repository) : base(repository)
         {
-            _seriesRepository = seriesRepository;
-        }
-        public Task<Series> Add(Series series)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<Series>> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Series> GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Series> Update(Series series)
-        {
-            throw new NotImplementedException();
         }
     }
 }

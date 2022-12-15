@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Cricket.Data;
+﻿using Microsoft.AspNetCore.Mvc;
+using Cricket.Data.Models;
+using Cricket.Services;
 using Cricket.Models;
 
 namespace Cricket.Controllers
@@ -14,25 +9,31 @@ namespace Cricket.Controllers
     [ApiController]
     public class TeamsController : ControllerBase
     {
-        private readonly CricketContext _context;
-
-        public TeamsController(CricketContext context)
+        private readonly ITeamService _service;
+        public TeamsController(ITeamService service)
         {
-            _context = context;
+            _service = service;
         }
 
         // GET: api/Teams
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Team>>> GetTeam()
+        public async Task<IEnumerable<TeamModel>> GetTeam()
         {
-            return await _context.Team.ToListAsync();
+            return await _service.GetAll();
         }
+
+        //[Route("[action]/{teamId}")]
+        //[HttpGet]
+        //public async Task<List<Team>> GetAllPlayersCountByTeam(int teamId)
+        //{
+        //    return await _service.GetAllPlayersCountByTeam(teamId);
+        //}
 
         // GET: api/Teams/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Team>> GetTeam(int id)
+        public async Task<ActionResult<TeamModel>> GetTeam(int id)
         {
-            var team = await _context.Team.FindAsync(id);
+            var team = await _service.GetById(id);
 
             if (team == null)
             {
@@ -45,71 +46,24 @@ namespace Cricket.Controllers
         // PUT: api/Teams/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTeam(int id, Team team)
+        public async void PutTeam(TeamModel team)
         {
-            if (id != team.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(team).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TeamExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            await _service.Update(team);
         }
 
         // POST: api/Teams
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Team>> PostTeam(Team team)
+        public void PostTeam(TeamModel team)
         {
-            try
-            {
-                _context.Team.Add(team);
-                await _context.SaveChangesAsync();
-
-                return CreatedAtAction("GetTeam", new { id = team.Id }, team);
-            }
-            catch (DbUpdateException ex)
-            {
-                return StatusCode(500, "Internal server error");
-            }
+            _service.Add(team);
         }
 
         // DELETE: api/Teams/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTeam(int id)
+        public void DeleteTeam(int id)
         {
-            var team = await _context.Team.FindAsync(id);
-            if (team == null)
-            {
-                return NotFound();
-            }
-
-            _context.Team.Remove(team);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool TeamExists(int id)
-        {
-            return _context.Team.Any(e => e.Id == id);
+            _service.Delete(id);
         }
     }
 }

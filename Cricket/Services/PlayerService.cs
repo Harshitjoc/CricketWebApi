@@ -1,21 +1,23 @@
 ﻿using Cricket.Data;
+using Cricket.Data.Models;
 using Cricket.Data.Repositories;
 using Cricket.Models;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cricket.Services
 {
     public class PlayerService : IPlayerService
     {
-        private readonly PlayerRepository _playerRepository;
-        public PlayerService(PlayerRepository playerRepository)
+        public PlayerService(IGenericRepository<Player> repository)
         {
-            _playerRepository = playerRepository;
+            Repository = repository;
         }
 
-        public Task<Player> Add(Player player)
+        private IGenericRepository<Player> Repository { get; }
+
+        public Task<PlayerModel> Add(PlayerModel player)
         {
-            return _playerRepository.Add(player);
+            throw new NotImplementedException();
         }
 
         public void Delete(int id)
@@ -23,17 +25,51 @@ namespace Cricket.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Player>> GetAll()
+        public async Task<IEnumerable<PlayerModel>> GetAll()
         {
-            throw new NotImplementedException();
+            List<PlayerModel> players = new List<PlayerModel>();
+            var result = await Repository.GetAll();
+            foreach (var player in result)
+            {
+                players.Add(new PlayerModel
+                {
+                    Id = player.Id,
+                    Age = player.Age,
+                    FirstName = player.FirstName,
+                    LastName = player.LastName,
+                    Country = player.Country.Name
+                });
+            }
+            
+            return players;
         }
 
-        public Task<Player> GetById(int id)
+        public async Task<List<PlayerModel>> GetAllPlayersByCountry(int countryId)
         {
-            throw new NotImplementedException();
+            List<PlayerModel> players = new List<PlayerModel>();
+            var result = await Repository.Get(p => p.Country.Id == countryId);
+            foreach (var player in result)
+            {
+                players.Add(new PlayerModel
+                {
+                    Id = player.Id,
+                    Age = player.Age,
+                    FirstName = player.FirstName,
+                    LastName = player.LastName,
+                    Country = player.Country.Name
+                });
+            }
+
+            return players;
         }
 
-        public Task<Player> Update(Player player)
+        public Task<PlayerModel> GetById(int id)
+        {
+            throw new NotImplementedException();
+            
+        }
+
+        public Task<PlayerModel> Update(PlayerModel player)
         {
             throw new NotImplementedException();
         }

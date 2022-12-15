@@ -1,13 +1,14 @@
-﻿using Cricket.Models;
+﻿using Cricket.Data.Models;
+using Cricket.Models;
 
 namespace Cricket.Services
 {
     public interface ICountryService
     {
-        Task<IEnumerable<Country>> GetAll();
-        Task<Country> GetById(int id);
-        Task<Country> Update(Country country);
-        Task<Country> Add(Country country);
+        Task<IEnumerable<CountryModel>> GetAll();
+        Task<CountryModel> GetById(int id);
+        Task<CountryModel> Update(CountryModel country);
+        Task<CountryModel> Add(CountryModel country);
         void Delete(int id);
     }
 }

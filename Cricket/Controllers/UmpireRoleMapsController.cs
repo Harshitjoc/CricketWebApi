@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Cricket.Data;
-using Cricket.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using Cricket.Data.Models;
+using Cricket.Services;
 
 namespace Cricket.Controllers
 {
@@ -14,25 +8,24 @@ namespace Cricket.Controllers
     [ApiController]
     public class UmpireRoleMapsController : ControllerBase
     {
-        private readonly CricketContext _context;
-
-        public UmpireRoleMapsController(CricketContext context)
+        private readonly IUmpireRoleMapService _service;
+        public UmpireRoleMapsController(IUmpireRoleMapService service)
         {
-            _context = context;
+            _service = service;
         }
 
         // GET: api/UmpireRoleMaps
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UmpireRoleMap>>> GetUmpireRoleMap()
+        public async Task<IEnumerable<UmpireRoleMap>> GetUmpireRoleMap()
         {
-            return await _context.UmpireRoleMap.ToListAsync();
+            return await _service.GetAll();
         }
 
         // GET: api/UmpireRoleMaps/5
         [HttpGet("{id}")]
         public async Task<ActionResult<UmpireRoleMap>> GetUmpireRoleMap(int id)
         {
-            var umpireRoleMap = await _context.UmpireRoleMap.FindAsync(id);
+            var umpireRoleMap = await _service.GetById(id);
 
             if (umpireRoleMap == null)
             {
@@ -45,71 +38,24 @@ namespace Cricket.Controllers
         // PUT: api/UmpireRoleMaps/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUmpireRoleMap(int id, UmpireRoleMap umpireRoleMap)
+        public async void PutUmpireRoleMap(UmpireRoleMap umpireRoleMap)
         {
-            if (id != umpireRoleMap.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(umpireRoleMap).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UmpireRoleMapExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            await _service.Update(umpireRoleMap);
         }
 
         // POST: api/UmpireRoleMaps
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<UmpireRoleMap>> PostUmpireRoleMap(UmpireRoleMap umpireRoleMap)
+        public void PostUmpireRoleMap(UmpireRoleMap umpireRoleMap)
         {
-            try
-            {
-                _context.UmpireRoleMap.Add(umpireRoleMap);
-                await _context.SaveChangesAsync();
-
-                return CreatedAtAction("GetUmpireRoleMap", new { id = umpireRoleMap.Id }, umpireRoleMap);
-            }
-            catch (DbUpdateException ex)
-            {
-                return StatusCode(500, "Internal server error");
-            }
+            _service.Add(umpireRoleMap);
         }
 
         // DELETE: api/UmpireRoleMaps/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUmpireRoleMap(int id)
+        public void DeleteUmpireRoleMap(int id)
         {
-            var umpireRoleMap = await _context.UmpireRoleMap.FindAsync(id);
-            if (umpireRoleMap == null)
-            {
-                return NotFound();
-            }
-
-            _context.UmpireRoleMap.Remove(umpireRoleMap);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool UmpireRoleMapExists(int id)
-        {
-            return _context.UmpireRoleMap.Any(e => e.Id == id);
+            _service.Delete(id);
         }
     }
 }

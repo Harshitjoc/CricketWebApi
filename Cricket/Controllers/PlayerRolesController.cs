@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Cricket.Data;
-using Cricket.Models;
+using Cricket.Data.Models;
+using Cricket.Services;
 
 namespace Cricket.Controllers
 {
@@ -14,25 +15,24 @@ namespace Cricket.Controllers
     [ApiController]
     public class PlayerRolesController : ControllerBase
     {
-        private readonly CricketContext _context;
-
-        public PlayerRolesController(CricketContext context)
+        private readonly IPlayerRoleService _service;
+        public PlayerRolesController(IPlayerRoleService service)
         {
-            _context = context;
+            _service = service;
         }
 
         // GET: api/PlayerRoles
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PlayerRole>>> GetPlayerRole()
+        public async Task<IEnumerable<PlayerRole>> GetPlayerRole()
         {
-            return await _context.PlayerRole.ToListAsync();
+            return await _service.GetAll();
         }
 
         // GET: api/PlayerRoles/5
         [HttpGet("{id}")]
         public async Task<ActionResult<PlayerRole>> GetPlayerRole(int id)
         {
-            var playerRole = await _context.PlayerRole.FindAsync(id);
+            var playerRole = await _service.GetById(id);
 
             if (playerRole == null)
             {
@@ -45,71 +45,24 @@ namespace Cricket.Controllers
         // PUT: api/PlayerRoles/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPlayerRole(int id, PlayerRole playerRole)
+        public async void PutPlayerRole(PlayerRole playerRole)
         {
-            if (id != playerRole.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(playerRole).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PlayerRoleExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            await _service.Update(playerRole);
         }
 
         // POST: api/PlayerRoles
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<PlayerRole>> PostPlayerRole(PlayerRole playerRole)
+        public void PostPlayerRole(PlayerRole playerRole)
         {
-            try
-            {
-                _context.PlayerRole.Add(playerRole);
-                await _context.SaveChangesAsync();
-
-                return CreatedAtAction("GetPlayerRole", new { id = playerRole.Id }, playerRole);
-            }
-            catch (DbUpdateException ex)
-            {
-                return StatusCode(500, "Internal server error");
-            }
+            _service.Add(playerRole);
         }
 
         // DELETE: api/PlayerRoles/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePlayerRole(int id)
+        public void DeletePlayerRole(int id)
         {
-            var playerRole = await _context.PlayerRole.FindAsync(id);
-            if (playerRole == null)
-            {
-                return NotFound();
-            }
-
-            _context.PlayerRole.Remove(playerRole);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool PlayerRoleExists(int id)
-        {
-            return _context.PlayerRole.Any(e => e.Id == id);
+            _service.Delete(id);
         }
     }
 }

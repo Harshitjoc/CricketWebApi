@@ -1,4 +1,7 @@
 ﻿using Cricket.Models;
+using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace Cricket.Data.Repositories
 {
@@ -6,6 +9,7 @@ namespace Cricket.Data.Repositories
     {
         Task<IEnumerable<T>> GetAll();
         Task<T> GetById(int id);
+        Task<List<T>> Get(Expression<Func<T,bool>> expression);
         Task<T> Update(T entity);
         Task<T> Add(T entity);
         void Delete(int id);

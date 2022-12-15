@@ -4,9 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Cricket.Data;
-using Cricket.Models;
+using Cricket.Data.Models;
+using Cricket.Services;
 
 namespace Cricket.Controllers
 {
@@ -14,25 +13,24 @@ namespace Cricket.Controllers
     [ApiController]
     public class ScoreBoardsController : ControllerBase
     {
-        private readonly CricketContext _context;
-
-        public ScoreBoardsController(CricketContext context)
+        private readonly IScoreBoardService _service;
+        public ScoreBoardsController(IScoreBoardService service)
         {
-            _context = context;
+            _service = service;
         }
 
         // GET: api/ScoreBoards
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ScoreBoard>>> GetScoreBoard()
+        public async Task<IEnumerable<ScoreBoard>> GetScoreBoard()
         {
-            return await _context.ScoreBoard.ToListAsync();
+            return await _service.GetAll();
         }
 
         // GET: api/ScoreBoards/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ScoreBoard>> GetScoreBoard(int id)
         {
-            var scoreBoard = await _context.ScoreBoard.FindAsync(id);
+            var scoreBoard = await _service.GetById(id);
 
             if (scoreBoard == null)
             {
@@ -45,71 +43,24 @@ namespace Cricket.Controllers
         // PUT: api/ScoreBoards/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutScoreBoard(int id, ScoreBoard scoreBoard)
+        public async void PutScoreBoard(ScoreBoard scoreBoard)
         {
-            if (id != scoreBoard.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(scoreBoard).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ScoreBoardExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            await _service.Update(scoreBoard);
         }
 
         // POST: api/ScoreBoards
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<ScoreBoard>> PostScoreBoard(ScoreBoard scoreBoard)
+        public void PostScoreBoard(ScoreBoard scoreBoard)
         {
-            try
-            {
-                _context.ScoreBoard.Add(scoreBoard);
-                await _context.SaveChangesAsync();
-
-                return CreatedAtAction("GetScoreBoard", new { id = scoreBoard.Id }, scoreBoard);
-            }
-            catch (DbUpdateException ex)
-            {
-                return StatusCode(500, "Internal server error");
-            }
+            _service.Add(scoreBoard);
         }
 
         // DELETE: api/ScoreBoards/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteScoreBoard(int id)
+        public void DeleteScoreBoard(int id)
         {
-            var scoreBoard = await _context.ScoreBoard.FindAsync(id);
-            if (scoreBoard == null)
-            {
-                return NotFound();
-            }
-
-            _context.ScoreBoard.Remove(scoreBoard);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool ScoreBoardExists(int id)
-        {
-            return _context.ScoreBoard.Any(e => e.Id == id);
+            _service.Delete(id);
         }
     }
 }

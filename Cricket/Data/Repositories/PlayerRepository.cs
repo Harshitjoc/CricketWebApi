@@ -1,4 +1,4 @@
-﻿using Cricket.Models;
+﻿using Cricket.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,12 +6,13 @@ namespace Cricket.Data.Repositories
 {
     public class PlayerRepository : BaseRepository<Player>, IGenericRepository<Player>
     {
-        private readonly CricketContext _context;
-        public PlayerRepository(CricketContext context)
+        public PlayerRepository(CricketContext context) : base(context)
         {
-            _context = context;
         }
-
+        public override async Task<IEnumerable<Player>> GetAll()
+        {
+            return await _context.Set<Player>().Include("Country").ToListAsync();
+        }
 
     }
 }

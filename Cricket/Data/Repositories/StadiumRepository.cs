@@ -1,13 +1,12 @@
-﻿using Cricket.Models;
+﻿using Cricket.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Cricket.Data.Repositories
 {
     public class StadiumRepository : BaseRepository<Stadium>, IGenericRepository<Stadium>
     {
-        private readonly CricketContext _context;
-        public StadiumRepository(CricketContext context)
+        public StadiumRepository(CricketContext context) : base(context)
         {
-            _context = context;
         }
     }
 }

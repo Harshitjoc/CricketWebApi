@@ -7,6 +7,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20221211145633_InitialCreate.cs" />
+    <Compile Remove="Migrations\20221211145633_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20221212053912_updateModels.cs" />
+    <Compile Remove="Migrations\20221212053912_updateModels.Designer.cs" />
+    <Compile Remove="Migrations\20221213194451_updateEntityModels.cs" />
+    <Compile Remove="Migrations\20221213194451_updateEntityModels.Designer.cs" />
+    <Compile Remove="Migrations\20221213210718_initialData.cs" />
+    <Compile Remove="Migrations\20221213210718_initialData.Designer.cs" />
+    <Compile Remove="Migrations\20221213211656_dataupdate.cs" />
+    <Compile Remove="Migrations\20221213211656_dataupdate.Designer.cs" />
+    <Compile Remove="Migrations\20221213212535_updating.cs" />
+    <Compile Remove="Migrations\20221213212535_updating.Designer.cs" />
+    <Compile Remove="Migrations\20221214050131_update.cs" />
+    <Compile Remove="Migrations\20221214050131_update.Designer.cs" />
+    <Compile Remove="Migrations\CricketContextModelSnapshot.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.0">
       <PrivateAssets>all</PrivateAssets>

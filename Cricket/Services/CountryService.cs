@@ -1,17 +1,20 @@
-﻿using Cricket.Data.Repositories;
+﻿using Cricket.Data.Models;
+using Cricket.Data.Repositories;
 using Cricket.Models;
+using NuGet.Protocol.Core.Types;
+using System.Diagnostics.Metrics;
 
 namespace Cricket.Services
 {
     public class CountryService : ICountryService
     {
-        private readonly CountryRepository _countryRepository;
-        public CountryService(CountryRepository countryRepository)
+        public CountryService(IGenericRepository<Country> repository)
         {
-            _countryRepository = countryRepository;
+            Repository = repository;
         }
+        private IGenericRepository<Country> Repository { get; }
 
-        public Task<Country> Add(Country entity)
+        public async Task<CountryModel> Add(CountryModel country)
         {
             throw new NotImplementedException();
         }
@@ -21,17 +24,28 @@ namespace Cricket.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Country>> GetAll()
+        public async Task<IEnumerable<CountryModel>> GetAll()
+        {
+            List<CountryModel> countries = new List<CountryModel>();
+            var result = await Repository.GetAll();
+            foreach (var country in result)
+            {
+                countries.Add(new CountryModel
+                {
+                    id= country.Id,
+                    name= country.Name
+                });
+            }
+
+            return countries;
+        }
+
+        public Task<CountryModel> GetById(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Country> GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Country> Update(Country entity)
+        public Task<CountryModel> Update(CountryModel country)
         {
             throw new NotImplementedException();
         }

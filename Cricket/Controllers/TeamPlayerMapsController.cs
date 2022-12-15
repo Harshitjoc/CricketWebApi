@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Cricket.Data;
-using Cricket.Models;
+using Cricket.Data.Models;
+using Cricket.Services;
 
 namespace Cricket.Controllers
 {
@@ -14,25 +9,24 @@ namespace Cricket.Controllers
     [ApiController]
     public class TeamPlayerMapsController : ControllerBase
     {
-        private readonly CricketContext _context;
-
-        public TeamPlayerMapsController(CricketContext context)
+        private readonly ITeamPlayerMapService _service;
+        public TeamPlayerMapsController(ITeamPlayerMapService service)
         {
-            _context = context;
+            _service = service;
         }
 
         // GET: api/TeamPlayerMaps
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TeamPlayerMap>>> GetTeamPlayerMap()
+        public async Task<IEnumerable<TeamPlayerMap>> GetTeamPlayerMap()
         {
-            return await _context.TeamPlayerMap.ToListAsync();
+            return await _service.GetAll();
         }
 
         // GET: api/TeamPlayerMaps/5
         [HttpGet("{id}")]
         public async Task<ActionResult<TeamPlayerMap>> GetTeamPlayerMap(int id)
         {
-            var teamPlayerMap = await _context.TeamPlayerMap.FindAsync(id);
+            var teamPlayerMap = await _service.GetById(id);
 
             if (teamPlayerMap == null)
             {
@@ -45,71 +39,24 @@ namespace Cricket.Controllers
         // PUT: api/TeamPlayerMaps/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTeamPlayerMap(int id, TeamPlayerMap teamPlayerMap)
+        public async void PutTeamPlayerMap(TeamPlayerMap teamPlayerMap)
         {
-            if (id != teamPlayerMap.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(teamPlayerMap).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TeamPlayerMapExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            await _service.Update(teamPlayerMap);
         }
 
         // POST: api/TeamPlayerMaps
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<TeamPlayerMap>> PostTeamPlayerMap(TeamPlayerMap teamPlayerMap)
+        public void PostTeamPlayerMap(TeamPlayerMap teamPlayerMap)
         {
-            try
-            {
-                _context.TeamPlayerMap.Add(teamPlayerMap);
-                await _context.SaveChangesAsync();
-
-                return CreatedAtAction("GetTeamPlayerMap", new { id = teamPlayerMap.Id }, teamPlayerMap);
-            }
-            catch (DbUpdateException ex)
-            {
-                return StatusCode(500, "Internal server error");
-            }
+            _service.Add(teamPlayerMap);
         }
 
         // DELETE: api/TeamPlayerMaps/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTeamPlayerMap(int id)
+        public void DeleteTeamPlayerMap(int id)
         {
-            var teamPlayerMap = await _context.TeamPlayerMap.FindAsync(id);
-            if (teamPlayerMap == null)
-            {
-                return NotFound();
-            }
-
-            _context.TeamPlayerMap.Remove(teamPlayerMap);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool TeamPlayerMapExists(int id)
-        {
-            return _context.TeamPlayerMap.Any(e => e.Id == id);
+            _service.Delete(id);
         }
     }
 }

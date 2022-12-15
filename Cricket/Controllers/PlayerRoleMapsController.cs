@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Cricket.Data;
-using Cricket.Models;
+using Cricket.Data.Models;
+using Cricket.Services;
 
 namespace Cricket.Controllers
 {
@@ -14,25 +15,24 @@ namespace Cricket.Controllers
     [ApiController]
     public class PlayerRoleMapsController : ControllerBase
     {
-        private readonly CricketContext _context;
-
-        public PlayerRoleMapsController(CricketContext context)
+        private readonly IPlayerRoleMapService _service;
+        public PlayerRoleMapsController(IPlayerRoleMapService service)
         {
-            _context = context;
+            _service = service;
         }
 
         // GET: api/PlayerRoleMaps
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PlayerRoleMap>>> GetPlayerRoleMap()
+        public async Task<IEnumerable<PlayerRoleMap>> GetPlayerRoleMap()
         {
-            return await _context.PlayerRoleMap.ToListAsync();
+            return await _service.GetAll();
         }
 
         // GET: api/PlayerRoleMaps/5
         [HttpGet("{id}")]
         public async Task<ActionResult<PlayerRoleMap>> GetPlayerRoleMap(int id)
         {
-            var playerRoleMap = await _context.PlayerRoleMap.FindAsync(id);
+            var playerRoleMap = await _service.GetById(id);
 
             if (playerRoleMap == null)
             {
@@ -45,71 +45,24 @@ namespace Cricket.Controllers
         // PUT: api/PlayerRoleMaps/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPlayerRoleMap(int id, PlayerRoleMap playerRoleMap)
+        public async void PutPlayerRoleMap(PlayerRoleMap playerRoleMap)
         {
-            if (id != playerRoleMap.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(playerRoleMap).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PlayerRoleMapExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            await _service.Update(playerRoleMap);
         }
 
         // POST: api/PlayerRoleMaps
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<PlayerRoleMap>> PostPlayerRoleMap(PlayerRoleMap playerRoleMap)
+        public void PostPlayerRoleMap(PlayerRoleMap playerRoleMap)
         {
-            try
-            {
-                _context.PlayerRoleMap.Add(playerRoleMap);
-                await _context.SaveChangesAsync();
-
-                return CreatedAtAction("GetPlayerRoleMap", new { id = playerRoleMap.Id }, playerRoleMap);
-            }
-            catch (DbUpdateException ex)
-            {
-                return StatusCode(500, "Internal server error");
-            }
+            _service.Add(playerRoleMap);
         }
 
         // DELETE: api/PlayerRoleMaps/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePlayerRoleMap(int id)
+        public void DeletePlayerRoleMap(int id)
         {
-            var playerRoleMap = await _context.PlayerRoleMap.FindAsync(id);
-            if (playerRoleMap == null)
-            {
-                return NotFound();
-            }
-
-            _context.PlayerRoleMap.Remove(playerRoleMap);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool PlayerRoleMapExists(int id)
-        {
-            return _context.PlayerRoleMap.Any(e => e.Id == id);
+            _service.Delete(id);
         }
     }
 }

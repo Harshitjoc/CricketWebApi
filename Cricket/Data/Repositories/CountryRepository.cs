@@ -1,13 +1,12 @@
-﻿using Cricket.Models;
+﻿using Cricket.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Cricket.Data.Repositories
 {
     public class CountryRepository : BaseRepository<Country>, IGenericRepository<Country>
     {
-        private readonly CricketContext _context;
-        public CountryRepository(CricketContext context)
+        public CountryRepository(CricketContext context) : base(context)
         {
-            _context = context;
         }
     }
 }

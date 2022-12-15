@@ -1,38 +1,12 @@
-﻿using Cricket.Data.Repositories;
-using Cricket.Models;
+﻿using Cricket.Data.Models;
+using Cricket.Data.Repositories;
 
 namespace Cricket.Services
 {
-    public class StadiumService : IStadiumService
+    public class StadiumService : BaseService<Stadium>, IStadiumService
     {
-        private readonly StadiumRepository _stadiumRepository;
-        public StadiumService(StadiumRepository stadiumRepository)
+        public StadiumService(IGenericRepository<Stadium> repository) : base(repository)
         {
-            _stadiumRepository = stadiumRepository;
-        }
-        public Task<Stadium> Add(Stadium stadium)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<Stadium>> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Stadium> GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Stadium> Update(Stadium stadium)
-        {
-            throw new NotImplementedException();
         }
     }
 }
