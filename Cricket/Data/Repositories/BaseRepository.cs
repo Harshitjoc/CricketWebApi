@@ -1,11 +1,12 @@
-﻿using Cricket.Models;
+﻿using Cricket.Data.Models;
+using Cricket.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace Cricket.Data.Repositories
 {
-    public class BaseRepository<T> : IGenericRepository<T> where T : class
+    public class BaseRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
         protected readonly CricketContext _context;
         public BaseRepository(CricketContext context)
@@ -13,17 +14,31 @@ namespace Cricket.Data.Repositories
             _context = context;
         }
         public virtual async Task<T> Add(T entity)
-        { 
+        {
+            var data = (BaseEntity)entity;
+            data.IsDeleted = false;
+            data.IsEnabled = true;
+            data.CreatedBy = 1;
+            data.UpdatedBy= 1;
+            data.CreatedDate= DateTime.Now;
+            data.UpdatedDate = DateTime.Now;
+            
             var result = await _context.Set<T>().AddAsync(entity);
             await _context.SaveChangesAsync();
             return result.Entity;
         }
 
-        public virtual async void Delete(int id)
+        public virtual async Task<bool> Delete(int id)
         {
             var entity = await _context.Set<T>().FindAsync(id);
-            _context.Set<T>().Remove(entity);
+            var data = (BaseEntity)entity;
+            data.IsDeleted = true;
+            data.IsEnabled = false;
+            data.UpdatedBy = 1;
+            data.UpdatedDate = DateTime.Now;
+            _context.Set<T>().Update(entity);
             await _context.SaveChangesAsync();
+            return true;
         }
 
         public virtual async Task<List<T>> Get(Expression<Func<T, bool>> expression)
@@ -44,6 +59,9 @@ namespace Cricket.Data.Repositories
 
         public virtual async Task<T> Update(T entity)
         {
+            var data = (BaseEntity)entity;
+            data.UpdatedBy = 1;
+            data.UpdatedDate = DateTime.Now;
             _context.Entry(entity).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 

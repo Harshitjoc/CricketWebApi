@@ -1,7 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cricket.Data.Models
 {
+    [Index(nameof(Name), IsUnique = true)]
     public class Country : BaseEntity
     {
         public string Name { get; set; }

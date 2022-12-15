@@ -8,6 +8,6 @@ namespace Cricket.Services
         Task<PlayerRoleMap> GetById(int id);
         Task<PlayerRoleMap> Update(PlayerRoleMap playerRoleMap);
         Task<PlayerRoleMap> Add(PlayerRoleMap playerRoleMap);
-        void Delete(int id);
+        Task<bool> Delete(int id);
     }
 }

@@ -9,6 +9,6 @@ namespace Cricket.Services
         Task<CountryModel> GetById(int id);
         Task<CountryModel> Update(CountryModel country);
         Task<CountryModel> Add(CountryModel country);
-        void Delete(int id);
+        Task<bool> Delete(int id);
     }
 }

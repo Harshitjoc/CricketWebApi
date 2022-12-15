@@ -30,6 +30,9 @@ namespace Cricket.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("Balls")
+                        .HasColumnType("int");
+
                     b.Property<int>("CreatedBy")
                         .HasColumnType("int");
 
@@ -48,7 +51,7 @@ namespace Cricket.Migrations
                     b.Property<int>("PlayerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Scored")
+                    b.Property<int>("Runs")
                         .HasColumnType("int");
 
                     b.Property<int>("Sixes")
@@ -59,6 +62,10 @@ namespace Cricket.Migrations
 
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -87,10 +94,16 @@ namespace Cricket.Migrations
                     b.Property<bool>("IsEnabled")
                         .HasColumnType("bit");
 
+                    b.Property<int>("NoBalls")
+                        .HasColumnType("int");
+
                     b.Property<int>("Overs")
                         .HasColumnType("int");
 
                     b.Property<int>("PlayerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Runs")
                         .HasColumnType("int");
 
                     b.Property<int>("UpdatedBy")
@@ -100,6 +113,9 @@ namespace Cricket.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Wickets")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WideBalls")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -131,7 +147,7 @@ namespace Cricket.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("UpdatedBy")
                         .HasColumnType("int");
@@ -140,6 +156,9 @@ namespace Cricket.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Country");
                 });
@@ -151,6 +170,12 @@ namespace Cricket.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BatsmanScoreBoardId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BowlerScoreBoardId")
+                        .HasColumnType("int");
 
                     b.Property<int>("CreatedBy")
                         .HasColumnType("int");
@@ -164,6 +189,13 @@ namespace Cricket.Migrations
                     b.Property<bool>("IsEnabled")
                         .HasColumnType("bit");
 
+                    b.Property<int>("MatchNo")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MatchReferee")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("SeriesId")
                         .HasColumnType("int");
 
@@ -176,6 +208,13 @@ namespace Cricket.Migrations
                     b.Property<int>("TeamBId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Toss")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UmpireRoleMapId")
+                        .HasColumnType("int");
+
                     b.Property<int>("UpdatedBy")
                         .HasColumnType("int");
 
@@ -184,6 +223,10 @@ namespace Cricket.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BatsmanScoreBoardId");
+
+                    b.HasIndex("BowlerScoreBoardId");
+
                     b.HasIndex("SeriesId");
 
                     b.HasIndex("StadiumId");
@@ -191,6 +234,8 @@ namespace Cricket.Migrations
                     b.HasIndex("TeamAId");
 
                     b.HasIndex("TeamBId");
+
+                    b.HasIndex("UmpireRoleMapId");
 
                     b.ToTable("MatchDetail");
                 });
@@ -526,45 +571,6 @@ namespace Cricket.Migrations
                     b.ToTable("TeamPlayerMap");
                 });
 
-            modelBuilder.Entity("Cricket.Data.Models.Toss", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Decision")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("UpdatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Winner")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Toss");
-                });
-
             modelBuilder.Entity("Cricket.Data.Models.Umpire", b =>
                 {
                     b.Property<int>("Id")
@@ -701,6 +707,18 @@ namespace Cricket.Migrations
 
             modelBuilder.Entity("Cricket.Data.Models.MatchDetail", b =>
                 {
+                    b.HasOne("Cricket.Data.Models.BatsmanScoreBoard", "BatsmanScoreBoard")
+                        .WithMany("MatchDetails")
+                        .HasForeignKey("BatsmanScoreBoardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Cricket.Data.Models.BowlerScoreBoard", "BowlerScoreBoard")
+                        .WithMany("MatchDetails")
+                        .HasForeignKey("BowlerScoreBoardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Cricket.Data.Models.Series", "Series")
                         .WithMany("MatchDetails")
                         .HasForeignKey("SeriesId")
@@ -725,6 +743,16 @@ namespace Cricket.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Cricket.Data.Models.UmpireRoleMap", "UmpireRoleMap")
+                        .WithMany("MatchDetails")
+                        .HasForeignKey("UmpireRoleMapId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BatsmanScoreBoard");
+
+                    b.Navigation("BowlerScoreBoard");
+
                     b.Navigation("Series");
 
                     b.Navigation("Stadium");
@@ -732,6 +760,8 @@ namespace Cricket.Migrations
                     b.Navigation("TeamA");
 
                     b.Navigation("TeamB");
+
+                    b.Navigation("UmpireRoleMap");
                 });
 
             modelBuilder.Entity("Cricket.Data.Models.Player", b =>
@@ -817,6 +847,16 @@ namespace Cricket.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Cricket.Data.Models.BatsmanScoreBoard", b =>
+                {
+                    b.Navigation("MatchDetails");
+                });
+
+            modelBuilder.Entity("Cricket.Data.Models.BowlerScoreBoard", b =>
+                {
+                    b.Navigation("MatchDetails");
+                });
+
             modelBuilder.Entity("Cricket.Data.Models.Country", b =>
                 {
                     b.Navigation("Players");
@@ -867,6 +907,11 @@ namespace Cricket.Migrations
             modelBuilder.Entity("Cricket.Data.Models.UmpireRole", b =>
                 {
                     b.Navigation("UmpireRoleMaps");
+                });
+
+            modelBuilder.Entity("Cricket.Data.Models.UmpireRoleMap", b =>
+                {
+                    b.Navigation("MatchDetails");
                 });
 #pragma warning restore 612, 618
         }

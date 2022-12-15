@@ -16,7 +16,7 @@ namespace Cricket.Data.Models
 
 
         [ForeignKey(nameof(CountryId))]
-        public  Country Country { get; set; }
+        public virtual  Country Country { get; set; }
 
         public virtual ICollection<TeamPlayerMap> TeamPlayerMaps { get; } = new List<TeamPlayerMap>();
         public virtual ICollection<PlayerRoleMap> PlayerRoleMaps { get; } = new List<PlayerRoleMap>();

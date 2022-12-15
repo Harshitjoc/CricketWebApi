@@ -50,24 +50,24 @@ namespace Cricket.Controllers
         // PUT: api/Players/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async void Put(PlayerModel player)
+        public async Task<PlayerModel> Put(PlayerModel player)
         {
-            await _service.Update(player);
+            return await _service.Update(player);
         }
 
         // POST: api/Players
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public void PostPlayer(PlayerModel player)
+        public async Task<PlayerModel> PostPlayer(PlayerModel player)
         {
-            _service.Add(player);
+            return await _service.Add(player);
         }
 
         // DELETE: api/Players/5
         [HttpDelete("{id}")]
-        public void DeletePlayer(int id)
+        public async Task<bool> DeletePlayer(int id)
         {
-            _service.Delete(id);
+            return await _service.Delete(id);
         }
     }
 }

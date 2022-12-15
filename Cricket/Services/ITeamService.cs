@@ -9,7 +9,7 @@ namespace Cricket.Services
         Task<TeamModel> GetById(int id);
         Task<TeamModel> Update(TeamModel team);
         Task<TeamModel> Add(TeamModel team);
-        void Delete(int id);
+        Task<bool> Delete(int id);
         
     }
 }

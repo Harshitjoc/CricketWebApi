@@ -39,24 +39,24 @@ namespace Cricket.Controllers
         // PUT: api/TeamPlayerMaps/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async void PutTeamPlayerMap(TeamPlayerMap teamPlayerMap)
+        public async Task<TeamPlayerMap> PutTeamPlayerMap(TeamPlayerMap teamPlayerMap)
         {
-            await _service.Update(teamPlayerMap);
+            return await _service.Update(teamPlayerMap);
         }
 
         // POST: api/TeamPlayerMaps
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public void PostTeamPlayerMap(TeamPlayerMap teamPlayerMap)
+        public async Task<TeamPlayerMap> PostTeamPlayerMap(TeamPlayerMap teamPlayerMap)
         {
-            _service.Add(teamPlayerMap);
+            return await _service.Add(teamPlayerMap);
         }
 
         // DELETE: api/TeamPlayerMaps/5
         [HttpDelete("{id}")]
-        public void DeleteTeamPlayerMap(int id)
+        public async Task<bool> DeleteTeamPlayerMap(int id)
         {
-            _service.Delete(id);
+            return await _service.Delete(id);
         }
     }
 }

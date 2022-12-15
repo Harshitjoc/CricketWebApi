@@ -8,6 +8,6 @@ namespace Cricket.Services
         Task<Series> GetById(int id);
         Task<Series> Update(Series series);
         Task<Series> Add(Series series);
-        void Delete(int id);
+        Task<bool> Delete(int id);
     }
 }

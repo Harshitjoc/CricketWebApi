@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Cricket.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class initialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,7 +17,7 @@ namespace Cricket.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedBy = table.Column<int>(type: "int", nullable: false),
                     UpdatedBy = table.Column<int>(type: "int", nullable: false),
                     IsEnabled = table.Column<bool>(type: "bit", nullable: false),
@@ -89,26 +89,6 @@ namespace Cricket.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Team", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Toss",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Winner = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Decision = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedBy = table.Column<int>(type: "int", nullable: false),
-                    UpdatedBy = table.Column<int>(type: "int", nullable: false),
-                    IsEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Toss", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -243,10 +223,12 @@ namespace Cricket.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Scored = table.Column<int>(type: "int", nullable: false),
                     PlayerId = table.Column<int>(type: "int", nullable: false),
+                    Runs = table.Column<int>(type: "int", nullable: false),
+                    Balls = table.Column<int>(type: "int", nullable: false),
                     Sixes = table.Column<int>(type: "int", nullable: false),
                     Fours = table.Column<int>(type: "int", nullable: false),
+                    status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedBy = table.Column<int>(type: "int", nullable: false),
                     UpdatedBy = table.Column<int>(type: "int", nullable: false),
                     IsEnabled = table.Column<bool>(type: "bit", nullable: false),
@@ -271,9 +253,12 @@ namespace Cricket.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    PlayerId = table.Column<int>(type: "int", nullable: false),
                     Wickets = table.Column<int>(type: "int", nullable: false),
                     Overs = table.Column<int>(type: "int", nullable: false),
-                    PlayerId = table.Column<int>(type: "int", nullable: false),
+                    Runs = table.Column<int>(type: "int", nullable: false),
+                    WideBalls = table.Column<int>(type: "int", nullable: false),
+                    NoBalls = table.Column<int>(type: "int", nullable: false),
                     CreatedBy = table.Column<int>(type: "int", nullable: false),
                     UpdatedBy = table.Column<int>(type: "int", nullable: false),
                     IsEnabled = table.Column<bool>(type: "bit", nullable: false),
@@ -357,52 +342,6 @@ namespace Cricket.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MatchDetail",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TeamAId = table.Column<int>(type: "int", nullable: false),
-                    TeamBId = table.Column<int>(type: "int", nullable: false),
-                    StadiumId = table.Column<int>(type: "int", nullable: false),
-                    SeriesId = table.Column<int>(type: "int", nullable: false),
-                    CreatedBy = table.Column<int>(type: "int", nullable: false),
-                    UpdatedBy = table.Column<int>(type: "int", nullable: false),
-                    IsEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MatchDetail", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_MatchDetail_Series_SeriesId",
-                        column: x => x.SeriesId,
-                        principalTable: "Series",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_MatchDetail_Stadium_StadiumId",
-                        column: x => x.StadiumId,
-                        principalTable: "Stadium",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_MatchDetail_Team_TeamAId",
-                        column: x => x.TeamAId,
-                        principalTable: "Team",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_MatchDetail_Team_TeamBId",
-                        column: x => x.TeamBId,
-                        principalTable: "Team",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "UmpireRoleMap",
                 columns: table => new
                 {
@@ -434,6 +373,76 @@ namespace Cricket.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "MatchDetail",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TeamAId = table.Column<int>(type: "int", nullable: false),
+                    TeamBId = table.Column<int>(type: "int", nullable: false),
+                    StadiumId = table.Column<int>(type: "int", nullable: false),
+                    SeriesId = table.Column<int>(type: "int", nullable: false),
+                    MatchNo = table.Column<int>(type: "int", nullable: false),
+                    UmpireRoleMapId = table.Column<int>(type: "int", nullable: false),
+                    MatchReferee = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BatsmanScoreBoardId = table.Column<int>(type: "int", nullable: false),
+                    BowlerScoreBoardId = table.Column<int>(type: "int", nullable: false),
+                    Toss = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<int>(type: "int", nullable: false),
+                    UpdatedBy = table.Column<int>(type: "int", nullable: false),
+                    IsEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MatchDetail", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MatchDetail_BatsmanScoreBoard_BatsmanScoreBoardId",
+                        column: x => x.BatsmanScoreBoardId,
+                        principalTable: "BatsmanScoreBoard",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_MatchDetail_BowlerScoreBoard_BowlerScoreBoardId",
+                        column: x => x.BowlerScoreBoardId,
+                        principalTable: "BowlerScoreBoard",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_MatchDetail_Series_SeriesId",
+                        column: x => x.SeriesId,
+                        principalTable: "Series",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_MatchDetail_Stadium_StadiumId",
+                        column: x => x.StadiumId,
+                        principalTable: "Stadium",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_MatchDetail_Team_TeamAId",
+                        column: x => x.TeamAId,
+                        principalTable: "Team",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_MatchDetail_Team_TeamBId",
+                        column: x => x.TeamBId,
+                        principalTable: "Team",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_MatchDetail_UmpireRoleMap_UmpireRoleMapId",
+                        column: x => x.UmpireRoleMapId,
+                        principalTable: "UmpireRoleMap",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_BatsmanScoreBoard_PlayerId",
                 table: "BatsmanScoreBoard",
@@ -443,6 +452,22 @@ namespace Cricket.Migrations
                 name: "IX_BowlerScoreBoard_PlayerId",
                 table: "BowlerScoreBoard",
                 column: "PlayerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Country_Name",
+                table: "Country",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MatchDetail_BatsmanScoreBoardId",
+                table: "MatchDetail",
+                column: "BatsmanScoreBoardId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MatchDetail_BowlerScoreBoardId",
+                table: "MatchDetail",
+                column: "BowlerScoreBoardId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MatchDetail_SeriesId",
@@ -463,6 +488,11 @@ namespace Cricket.Migrations
                 name: "IX_MatchDetail_TeamBId",
                 table: "MatchDetail",
                 column: "TeamBId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MatchDetail_UmpireRoleMapId",
+                table: "MatchDetail",
+                column: "UmpireRoleMapId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Player_CountryId",
@@ -519,12 +549,6 @@ namespace Cricket.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "BatsmanScoreBoard");
-
-            migrationBuilder.DropTable(
-                name: "BowlerScoreBoard");
-
-            migrationBuilder.DropTable(
                 name: "MatchDetail");
 
             migrationBuilder.DropTable(
@@ -537,10 +561,10 @@ namespace Cricket.Migrations
                 name: "TeamPlayerMap");
 
             migrationBuilder.DropTable(
-                name: "Toss");
+                name: "BatsmanScoreBoard");
 
             migrationBuilder.DropTable(
-                name: "UmpireRoleMap");
+                name: "BowlerScoreBoard");
 
             migrationBuilder.DropTable(
                 name: "Series");
@@ -549,13 +573,16 @@ namespace Cricket.Migrations
                 name: "Stadium");
 
             migrationBuilder.DropTable(
+                name: "UmpireRoleMap");
+
+            migrationBuilder.DropTable(
                 name: "PlayerRole");
 
             migrationBuilder.DropTable(
-                name: "Player");
+                name: "Team");
 
             migrationBuilder.DropTable(
-                name: "Team");
+                name: "Player");
 
             migrationBuilder.DropTable(
                 name: "UmpireRole");

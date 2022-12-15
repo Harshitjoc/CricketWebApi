@@ -8,19 +8,39 @@ namespace Cricket.Services
 {
     public class PlayerService : IPlayerService
     {
-        public PlayerService(IGenericRepository<Player> repository)
+        public PlayerService(IGenericRepository<Player> repository, IGenericRepository<Country> countryRepository)
         {
             Repository = repository;
+            CountryRepository = countryRepository;
         }
 
         private IGenericRepository<Player> Repository { get; }
+        private IGenericRepository<Country> CountryRepository { get; }
 
-        public Task<PlayerModel> Add(PlayerModel player)
+        public async Task<PlayerModel> Add(PlayerModel player)
         {
-            throw new NotImplementedException();
+            var pl1 = new Player
+            {
+                FirstName = player.FirstName,
+                LastName = player.LastName,
+                Age = player.Age,
+                
+            };
+            var country =(await CountryRepository.Get(c => c.Name.Equals(player.Country))).SingleOrDefault();
+            if (country == null)
+            {
+                throw new Exception("Country does not exist");
+            }
+            else
+            {
+                pl1.CountryId = country.Id;
+            }
+            await Repository.Add(pl1);
+            player.Id= pl1.Id;
+            return player;
         }
 
-        public void Delete(int id)
+        public Task<bool> Delete(int id)
         {
             throw new NotImplementedException();
         }

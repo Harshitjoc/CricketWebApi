@@ -8,7 +8,7 @@ using Cricket.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<CricketContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("CricketContext") ?? throw new InvalidOperationException("Connection string 'CricketContext' not found.")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("CricketContext") ?? throw new InvalidOperationException("Connection string 'CricketContext' not found.")), ServiceLifetime.Transient);
 
 builder.Services.AddScoped<IGenericRepository<BatsmanScoreBoard>, BatsmanScoreBoardRepository>();
 builder.Services.AddScoped<IGenericRepository<BowlerScoreBoard>, BowlerScoreBoardRepository>();

@@ -8,6 +8,6 @@ namespace Cricket.Services
         Task<UmpireRole> GetById(int id);
         Task<UmpireRole> Update(UmpireRole umpireRole);
         Task<UmpireRole> Add(UmpireRole umpireRole);
-        void Delete(int id);
+        Task<bool> Delete(int id);
     }
 }

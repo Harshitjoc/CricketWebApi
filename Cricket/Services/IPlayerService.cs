@@ -13,6 +13,6 @@ namespace Cricket.Services
         Task<List<PlayerModel>> GetAllPlayersByCountry(int countryId);
         Task<PlayerModel> Update(PlayerModel player);
         Task<PlayerModel> Add(PlayerModel player);
-        void Delete(int id);
+        Task<bool> Delete(int id);
     }
 }

@@ -8,6 +8,6 @@ namespace Cricket.Services
         Task<ScoreBoard> GetById(int id);
         Task<ScoreBoard> Update(ScoreBoard scoreBoard);
         Task<ScoreBoard> Add(ScoreBoard scoreBoard);
-        void Delete(int id);
+        Task<bool> Delete(int id);
     }
 }

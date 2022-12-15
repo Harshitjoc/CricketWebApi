@@ -17,10 +17,14 @@ namespace Cricket.Services
         private IGenericRepository<Team> Repository { get; }
         public async Task<TeamModel> Add(TeamModel team)
         {
-            throw new NotImplementedException();
+            Team team1= new Team();
+            team1.Name = team.Name;
+            var result = await Repository.Add(team1);
+            team.Id = result.Id;
+            return team;
         }
 
-        public void Delete(int id)
+        public Task<bool> Delete(int id)
         {
             throw new NotImplementedException();
         }
@@ -45,7 +49,7 @@ namespace Cricket.Services
             
             return teams;
         }
-        //team.playercount = teams.players.count
+
         public Task<TeamModel> GetById(int id)
         {
             throw new NotImplementedException();

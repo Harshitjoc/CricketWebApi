@@ -12,6 +12,6 @@ namespace Cricket.Data.Repositories
         Task<List<T>> Get(Expression<Func<T,bool>> expression);
         Task<T> Update(T entity);
         Task<T> Add(T entity);
-        void Delete(int id);
+        Task<bool> Delete(int id);
     }
 }

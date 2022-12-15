@@ -24,9 +24,9 @@ namespace Cricket.Services
             return result;
         }
 
-        public void Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            _repository.Delete(id);
+            return await _repository.Delete(id);
         }
 
         public Task<T> Get(Expression<Func<T, bool>> expression)

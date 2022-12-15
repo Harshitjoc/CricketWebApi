@@ -47,16 +47,16 @@ namespace Cricket.Controllers
         // POST: api/Countries
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public void PostCountry(CountryModel country)
+        public async Task<CountryModel> PostCountry(CountryModel country)
         {
-            _service.Add(country);
+            return await _service.Add(country);
         }
 
         // DELETE: api/Countries/5
         [HttpDelete("{id}")]
-        public void DeleteCountry(int id)
+        public async Task<bool> DeleteCountry(int id)
         {
-            _service.Delete(id);
+            return await _service.Delete(id);
         }
     }
 }
