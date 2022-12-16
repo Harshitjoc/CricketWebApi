@@ -83,10 +83,23 @@ namespace Cricket.Services
             return players;
         }
 
-        public Task<PlayerModel> GetById(int id)
+        public async Task<List<PlayerModel>> GetById(int id)
         {
-            throw new NotImplementedException();
-            
+            var result = await Repository.GetById(id);
+            List<PlayerModel> players = new List<PlayerModel>();
+            if (result != null)
+            {
+                players.Add(new PlayerModel
+                {
+                    Id = result.Id,
+                    Age = result.Age,
+                    FirstName = result.FirstName,
+                    LastName = result.LastName
+                });
+            }
+
+            return players;
+
         }
 
         public Task<PlayerModel> Update(PlayerModel player)

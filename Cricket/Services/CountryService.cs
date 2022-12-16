@@ -1,9 +1,6 @@
 ﻿using Cricket.Data.Models;
 using Cricket.Data.Repositories;
 using Cricket.Models;
-using NuGet.Protocol.Core.Types;
-using System.Diagnostics.Metrics;
-using System.Numerics;
 
 namespace Cricket.Services
 {
@@ -28,7 +25,9 @@ namespace Cricket.Services
 
         public async Task<bool> Delete(int id)
         {
-           return await Repository.Delete(id);
+            var Country = await Repository.Get(c=> c.Id == id);
+            var result = await Repository.Delete(id);
+            return result;
         }
 
         public async Task<IEnumerable<CountryModel>> GetAll()
@@ -52,7 +51,7 @@ namespace Cricket.Services
             throw new NotImplementedException();
         }
 
-        public Task<CountryModel> Update(CountryModel country)
+        public async Task<CountryModel> Update(CountryModel country)
         {
             throw new NotImplementedException();
         }

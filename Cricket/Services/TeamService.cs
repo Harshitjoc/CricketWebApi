@@ -1,9 +1,6 @@
-﻿using Cricket.Data;
-using Cricket.Data.Models;
+﻿using Cricket.Data.Models;
 using Cricket.Data.Repositories;
 using Cricket.Models;
-using Microsoft.EntityFrameworkCore;
-using NuGet.Protocol.Core.Types;
 
 namespace Cricket.Services
 {
@@ -29,7 +26,7 @@ namespace Cricket.Services
 
         public Task<bool> Delete(int id)
         {
-            throw new NotImplementedException();
+            return Repository.Delete(id);
         }
 
         public async Task<IEnumerable<TeamModel>> GetAll()
@@ -37,7 +34,6 @@ namespace Cricket.Services
             List<TeamModel> teams = new List<TeamModel>();
             var result = await Repository.GetAll();
            
-
             foreach (var team in result)
             {
                 teams.Add(new TeamModel

@@ -8,7 +8,7 @@ namespace Cricket.Services
     public interface IPlayerService
     {
         Task<IEnumerable<PlayerModel>> GetAll();
-        Task<PlayerModel> GetById(int id);
+        Task<List<PlayerModel>> GetById(int id);
 
         Task<List<PlayerModel>> GetAllPlayersByCountry(int countryId);
         Task<PlayerModel> Update(PlayerModel player);

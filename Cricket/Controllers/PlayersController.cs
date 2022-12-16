@@ -35,7 +35,7 @@ namespace Cricket.Controllers
 
         // GET: api/Players/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<PlayerModel>> GetPlayer(int id)
+        public async Task<ActionResult<List<PlayerModel>>> GetPlayer(int id)
         {
             var player = await _service.GetById(id);
 
