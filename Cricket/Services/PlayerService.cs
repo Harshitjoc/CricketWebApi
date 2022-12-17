@@ -40,9 +40,10 @@ namespace Cricket.Services
             return player;
         }
 
-        public Task<bool> Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            throw new NotImplementedException();
+            var result = await Repository.Delete(id);
+            return result;
         }
 
         public async Task<IEnumerable<PlayerModel>> GetAll()
@@ -102,9 +103,28 @@ namespace Cricket.Services
 
         }
 
-        public Task<PlayerModel> Update(PlayerModel player)
+        public async Task<PlayerModel> Update(PlayerModel player)
         {
-            throw new NotImplementedException();
+            var pl1 = new Player
+            {
+                Id = player.Id,
+                Age = player.Age,
+                FirstName = player.FirstName,
+                LastName = player.LastName
+            };
+            var country = (await CountryRepository.Get(c => c.Name.Equals(player.Country))).SingleOrDefault();
+            if (country == null)
+            {
+                throw new Exception("Country does not exist");
+            }
+            else
+            {
+                pl1.CountryId = country.Id;
+            }
+            await Repository.Update(pl1);
+            player.Id = pl1.Id;
+            return player;
+            
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Cricket.Controllers
 
         // GET: api/Countries/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CountryModel>> GetCountry(int id)
+        public async Task<ActionResult<List<CountryModel>>> GetCountry(int id)
         {
             var CountryModel = await _service.GetById(id);
 

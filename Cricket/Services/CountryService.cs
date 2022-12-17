@@ -25,7 +25,6 @@ namespace Cricket.Services
 
         public async Task<bool> Delete(int id)
         {
-            var Country = await Repository.Get(c=> c.Id == id);
             var result = await Repository.Delete(id);
             return result;
         }
@@ -46,14 +45,32 @@ namespace Cricket.Services
             return countries;
         }
 
-        public Task<CountryModel> GetById(int id)
+        public async Task<List<CountryModel>> GetById(int id)
         {
-            throw new NotImplementedException();
+            var result = await Repository.GetById(id);
+            List<CountryModel> countries = new List<CountryModel>();
+            if (result != null)
+            {
+                countries.Add(new CountryModel
+                {
+                    Id = result.Id,
+                    Name = result.Name
+                });
+            }
+
+            return countries;
         }
 
         public async Task<CountryModel> Update(CountryModel country)
         {
-            throw new NotImplementedException();
+            var Country = new Country
+            {
+                Id = country.Id,
+                Name = country.Name
+            };
+            await Repository.Update(Country);
+            country.Id = Country.Id;
+            return country;
         }
     }
 }

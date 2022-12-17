@@ -63,8 +63,14 @@ namespace Cricket.Data.Repositories
             data.UpdatedBy = 1;
             data.UpdatedDate = DateTime.Now;
             _context.Entry(entity).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (ObjectDisposedException ex) 
+            {
+                Console.WriteLine(ex.Message);
+            }
             return entity;
         }
     }
